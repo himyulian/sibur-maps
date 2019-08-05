@@ -2,7 +2,7 @@
   "name": "qsiburmaps",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "SIBUR Maps",
+  "productName": "SIBUR.maps",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Yulian Mukhamedov <armiya12@mail.ru>",
   "private": true,

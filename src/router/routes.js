@@ -1,14 +1,16 @@
-
-const routes = [
-  {
-    path: '/',
-    component: () => import('layouts/Layout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: 'mapVSK', component: () => import('pages/MapVSK.vue') }
-    ]
-  }
-]
+const routes = [{
+  path: '/',
+  component: () => import('layouts/Layout.vue'),
+  children: [{
+      path: '',
+      component: () => import('pages/Index.vue')
+    },
+    {
+      path: 'mapVSK',
+      component: () => import('pages/MapVSK.vue')
+    },
+  ]
+}]
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {
