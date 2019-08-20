@@ -4,7 +4,7 @@
   "description": "A Quasar Framework app",
   "productName": "SIBUR.maps",
   "cordovaId": "org.cordova.quasar.app",
-  "author": "Yulian Mukhamedov <armiya12@mail.ru>",
+  "author": "Yulian Mukhamedov <MukhamedovYuA@vsk.sibur.ru>",
   "private": true,
   "scripts": {
     "dev": "quasar dev",

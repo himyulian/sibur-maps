@@ -1,18 +1,30 @@
 <template>
 	<q-page padding>
 		<l-map
+			ref="myMap"
 			style="min-height: calc(-100px + 100vh);"
-			:crs="mapInstance.crs"
-			:key="mapInstance.crs.code"
-			:zoom="mapInstance.zoom"
-			:center="mapInstance.center"
-			:padding="mapInstance.padding"
+			:crs="mapInstanceVSK.crs"
+			:key="mapInstanceVSK.crs.code"
+			:zoom="mapInstanceVSK.zoom"
+			:center="mapInstanceVSK.center"
+			:padding="mapInstanceVSK.padding"
 			@update:zoom="zoomUpdated"
 			@update:center="centerUpdated"
 			@update:bounds="boundsUpdated"
 		>
-			<l-tile-layer :url="mapInstance.url" :options="mapInstance.options"></l-tile-layer>
-			<l-polygon :lat-lngs="[GET_VSK_LANDUSE]"></l-polygon>
+			<l-tile-layer :url="tile.url" :options="tile.options"></l-tile-layer>
+
+			<l-geo-json :geojson="vsk_main_landuse" :optionsStyle="styles.landuse"></l-geo-json>
+			<l-geo-json :geojson="vsk_main_roads" :optionsStyle="styles.roads"></l-geo-json>
+			<l-geo-json
+				:geojson="vsk_main_construnctions"
+				:optionsStyle="styles.construnctions"
+				:options="options"
+				@click="onClick"
+			></l-geo-json>
+			<l-geo-json :geojson="vsk_main_railways" :optionsStyle="styles.railways.b" :options="options"></l-geo-json>
+			<l-geo-json :geojson="vsk_main_railways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
+
 			<l-marker :lat-lng="markers.m1"></l-marker>
 		</l-map>
 	</q-page>
@@ -23,7 +35,9 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { LMap, LTileLayer, LMarker, LPolygon, LPolyline } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LGeoJson } from 'vue2-leaflet'
+
+import PopupContent from "../components/GeoJson2Popup"
 
 export default {
   name: 'PageMapVSK',
@@ -31,9 +45,12 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPolygon
+    LGeoJson
   },
   methods: {
+    onClick(event) {
+      console.log('event', event)
+    },
     zoomUpdated (zoom) {
       this.SET_ZOOM(zoom)
     },
@@ -44,15 +61,37 @@ export default {
       this.SET_BOUNDS(bounds)
     },
     ...mapMutations('mapVskModule', ['SET_ZOOM', 'SET_CENTER', 'SET_BOUNDS']),
-    ...mapActions('mapVskModule', ['fetchData', 'fetchMapVsk'])
+    ...mapActions('mapVskModule', ['fetchMapVsk'])
   },
   computed: {
-    ...mapState('mapVskModule', ['mapInstance', 'mapVsk', 'markers']),
-    ...mapGetters('mapVskModule', ['GET_DATA', 'GET_VSK_LANDUSE'])
+    ...mapState('mapVskModule', ['mapInstanceVSK', 'tile', 'styles', 'mapVsk', 'markers']),
+    ...mapGetters('mapVskModule', ['vsk_main_landuse', 'vsk_main_construnctions', 'vsk_main_railways', 'vsk_main_roads']),
+    options() {
+      return {
+        onEachFeature: this.onEachFeatureFunction
+      };
+    },
+    onEachFeatureFunction() {
+      return (feature, layer) => {
+        layer.bindTooltip(
+          "<div>id: " +
+            feature.properties.id +
+          "</div>",
+          { permanent: false, sticky: true }
+        );
+      };
+    }
   },
+  watch: {  },
   created () {
-    this.fetchData()
     this.fetchMapVsk()
+  },
+  mounted() {
+    const map = this.$refs.myMap.mapObject;
+    map.createPane('construnctions');
+    map.createPane('railways');
+    map.getPane('construnctions').style.zIndex = 650;
+    map.getPane('railways').style.zIndex = 600;
   }
 }
 </script>

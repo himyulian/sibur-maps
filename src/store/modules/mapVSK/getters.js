@@ -1,9 +1,15 @@
-export function GET_DATA(state) {
-  return state.data
+export function vsk_main_landuse(state) {
+  return state.mapVsk && state.mapVsk.landuse.features
 }
 
-export function GET_VSK_LANDUSE(state) {
-  return state.mapVsk && state.mapVsk.landuse.features[0].geometry.coordinates[0][0].map(v => {
-    return [v[0], v[1]] = [v[1], v[0]]
-  }) || []
+export function vsk_main_construnctions(state) {
+  return state.mapVsk && state.mapVsk.construnctions.features
+}
+
+export function vsk_main_railways(state) {
+  return state.mapVsk && state.mapVsk.railways.features
+}
+
+export function vsk_main_roads(state) {
+  return state.mapVsk && state.mapVsk.roads.features
 }

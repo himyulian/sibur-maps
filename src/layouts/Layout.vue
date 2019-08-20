@@ -68,7 +68,7 @@
 
 <script>
 import { openURL } from 'quasar'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'Layout',
@@ -79,15 +79,12 @@ export default {
 		}
   },
   computed: {
-    ...mapState('mapVskModule', ['mapInstance', 'markers']),
     ...mapState('userModule', ['currentUser'])
   },
 	methods: {
-    ...mapActions('mapVskModule', ['fetchData']),
 		openURL,
   },
   created() {
-    this.fetchData()
   }
 }
 </script>
