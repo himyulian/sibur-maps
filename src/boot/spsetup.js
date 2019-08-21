@@ -1,4 +1,4 @@
-import "@pnp/polyfill-ie11"
+import '@pnp/polyfill-ie11'
 import { sp } from '@pnp/sp'
 
 sp.setup({
@@ -6,7 +6,7 @@ sp.setup({
     headers: {
       Accept: 'application/json;odata=verbose'
     },
-    baseUrl: "https://sharepoint/orgunits/vsk/"
+    baseUrl: 'https://sharepoint/orgunits/vsk/'
   }
 })
 
