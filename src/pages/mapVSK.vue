@@ -2,7 +2,7 @@
 	<q-page padding>
 		<l-map
 			ref="VSK"
-			style="min-height: calc(-100px + 100vh);"
+			style="min-height: calc(-80px + 100vh);"
 			:crs="mapInstanceVSK.crs"
 			:key="mapInstanceVSK.crs.code"
 			:zoom="mapInstanceVSK.zoom"
