@@ -1,15 +1,15 @@
-export function vsk_main_landuse(state) {
-  return state.mapVsk && state.mapVsk.landuse.features
+export function getFeaturesVSKMainLanduse (state) {
+  return state.mapVSK && state.mapVSK.landuse.features
 }
 
-export function vsk_main_construnctions(state) {
-  return state.mapVsk && state.mapVsk.construnctions.features
+export function getFeaturesVSKMainConstrunctions (state) {
+  return state.mapVSK && state.mapVSK.construnctions.features
 }
 
-export function vsk_main_railways(state) {
-  return state.mapVsk && state.mapVsk.railways.features
+export function getFeaturesVSKMainRailways (state) {
+  return state.mapVSK && state.mapVSK.railways.features
 }
 
-export function vsk_main_roads(state) {
-  return state.mapVsk && state.mapVsk.roads.features
+export function getFeaturesVSKMainRoads (state) {
+  return state.mapVSK && state.mapVSK.roads.features
 }

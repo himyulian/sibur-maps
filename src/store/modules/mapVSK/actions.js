@@ -1,24 +1,23 @@
 import axios from 'axios'
 
-export async function fetchMapVsk({
+export async function fetchMapVSK ({
   commit,
 }) {
   try {
-    commit('SET_LOADING_STATUS', true)
+    commit('setLoadingStatus', true)
     let landuse = await axios.get('../../../geoJSON/vsk_main_landuse.geojson')
     let construnctions = await axios.get('../../../geoJSON/vsk_main_construnctions.geojson')
     let railways = await axios.get('../../../geoJSON/vsk_main_railways.geojson')
     let roads = await axios.get('../../../geoJSON/vsk_main_roads.geojson')
+    commit('setLoadingStatus', false)
     let response = {
       landuse: landuse.data,
       construnctions: construnctions.data,
       railways: railways.data,
       roads: roads.data
     }
-    commit('SET_LOADING_STATUS', false)
-    commit('SET_MAP_VSK', response)
+    commit('setMapVSK', response)
   } catch (e) {
-    console.error(e)
+    console.error('Ошибка при загрузке карты ВСК', e)
   }
-
 }

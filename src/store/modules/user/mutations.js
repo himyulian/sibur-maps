@@ -1,7 +1,7 @@
-export function SET_LOADING_STATUS(state, status) {
-  state.loadingStatus = status
+export function setLoadingStatus (state, status) {
+  state.loading = status
 }
 
-export function SET_CURRENT_USER(state, payload) {
+export function setCurrentUser (state, payload) {
   state.currentUser = payload
 }

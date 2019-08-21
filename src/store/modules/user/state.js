@@ -1,4 +1,4 @@
 export default {
-  loadingStatus: 'notLoading',
+  loading: false,
   currentUser: null
 }

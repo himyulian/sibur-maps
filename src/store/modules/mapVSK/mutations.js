@@ -1,19 +1,19 @@
-export function SET_LOADING_STATUS(state, status) {
+export function setLoadingStatus (state, status) {
   state.loading = status
 }
 
-export function SET_ZOOM(state, zoom) {
+export function setZoom (state, zoom) {
   state.mapInstanceVSK.zoom = zoom
 }
 
-export function SET_CENTER(state, center) {
+export function setCenter (state, center) {
   state.mapInstanceVSK.center = center
 }
 
-export function SET_BOUNDS(state, bounds) {
+export function setBounds (state, bounds) {
   state.mapInstanceVSK.bounds = bounds
 }
 
-export function SET_MAP_VSK(state, geojsonData) {
-  state.mapVsk = geojsonData
+export function setMapVSK (state, geojsonData) {
+  state.mapVSK = geojsonData
 }

@@ -1,7 +1,7 @@
 <template>
 	<q-page padding>
 		<l-map
-			ref="myMap"
+			ref="VSK"
 			style="min-height: calc(-100px + 100vh);"
 			:crs="mapInstanceVSK.crs"
 			:key="mapInstanceVSK.crs.code"
@@ -14,16 +14,16 @@
 		>
 			<l-tile-layer :url="tile.url" :options="tile.options"></l-tile-layer>
 
-			<l-geo-json :geojson="vsk_main_landuse" :optionsStyle="styles.landuse"></l-geo-json>
-			<l-geo-json :geojson="vsk_main_roads" :optionsStyle="styles.roads"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKMainLanduse" :optionsStyle="styles.landuse"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKMainRoads" :optionsStyle="styles.roads"></l-geo-json>
 			<l-geo-json
-				:geojson="vsk_main_construnctions"
+				:geojson="getFeaturesVSKMainConstrunctions"
 				:optionsStyle="styles.construnctions"
 				:options="options"
 				@click="onClick"
 			></l-geo-json>
-			<l-geo-json :geojson="vsk_main_railways" :optionsStyle="styles.railways.b" :options="options"></l-geo-json>
-			<l-geo-json :geojson="vsk_main_railways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.b" :options="options"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
 		</l-map>
@@ -52,20 +52,20 @@ export default {
       console.log('event', event)
     },
     zoomUpdated (zoom) {
-      this.SET_ZOOM(zoom)
+      this.setZoom(zoom)
     },
     centerUpdated (center) {
-      this.SET_CENTER(center)
+      this.setCenter(center)
     },
     boundsUpdated (bounds) {
-      this.SET_BOUNDS(bounds)
+      this.setBounds(bounds)
     },
-    ...mapMutations('mapVskModule', ['SET_ZOOM', 'SET_CENTER', 'SET_BOUNDS']),
-    ...mapActions('mapVskModule', ['fetchMapVsk'])
+    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
+    ...mapActions('moduleMapVSK', ['fetchMapVSK'])
   },
   computed: {
-    ...mapState('mapVskModule', ['mapInstanceVSK', 'tile', 'styles', 'mapVsk', 'markers']),
-    ...mapGetters('mapVskModule', ['vsk_main_landuse', 'vsk_main_construnctions', 'vsk_main_railways', 'vsk_main_roads']),
+    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
+    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads']),
     options() {
       return {
         onEachFeature: this.onEachFeatureFunction
@@ -84,10 +84,10 @@ export default {
   },
   watch: {  },
   created () {
-    this.fetchMapVsk()
+    this.fetchMapVSK()
   },
   mounted() {
-    const map = this.$refs.myMap.mapObject;
+    const map = this.$refs.VSK.mapObject;
     map.createPane('construnctions');
     map.createPane('railways');
     map.getPane('construnctions').style.zIndex = 650;

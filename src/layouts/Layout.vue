@@ -19,8 +19,9 @@
 						</q-avatar>
 					</q-item-section>
 					<q-item-section>
-						<q-item-label>{{currentUser && currentUser.DisplayName }}</q-item-label>
-						<q-item-label caption lines="1">{{currentUser && currentUser.Email }}</q-item-label>
+						<q-item-label>{{ currentUser && currentUser.DisplayName || 'Name' }}</q-item-label>
+						<q-item-label caption lines="1">{{ currentUser && currentUser.Email || 'Email' }}</q-item-label>
+						<q-item-label caption lines="2">{{ getCurrentUserCompany || 'Company' }}</q-item-label>
 					</q-item-section>
 				</q-item>
 
@@ -68,7 +69,7 @@
 
 <script>
 import { openURL } from 'quasar'
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
 	name: 'Layout',
@@ -79,12 +80,15 @@ export default {
 		}
   },
   computed: {
-    ...mapState('userModule', ['currentUser'])
+		...mapState('moduleUser', ['currentUser']),
+    ...mapGetters('moduleUser', ['getCurrentUserCompany'])
   },
 	methods: {
 		openURL,
+		...mapActions('moduleUser', ['fetchCurrentUser'])
   },
   created() {
+		this.fetchCurrentUser()
   }
 }
 </script>

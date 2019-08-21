@@ -1,10 +1,15 @@
 import { sp } from '@pnp/sp'
 
-export function fetchCurrentUser({ commit }) {
-  commit('SET_LOADING_STATUS', 'loading')
-  sp.profiles.myProperties.get().then((currentUser) => {
-    console.log("TCL: fetchCurrentUser -> currentUser", currentUser)
-    commit('SET_LOADING_STATUS', 'notLoading')
-    commit('SET_CURRENT_USER', currentUser)
-  }).catch((err) => console.error(err))
+export async function fetchCurrentUser ({ commit, getters }) {
+  try {
+    commit('setLoadingStatus', true)
+    let currentUser = await sp.profiles.myProperties.get()
+    commit('setLoadingStatus', false)
+    commit('setCurrentUser', currentUser)
+    console.log('currentUser', currentUser)
+    console.log('currentUserProps', getters.getCurrentUserProps)
+    console.log('currentUserCompany', getters.getCurrentUserCompany)
+  } catch (e) {
+    console.error('Ошибка в получении текущего пользователя', e)
+  }
 }
