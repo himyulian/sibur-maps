@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import moduleMapVSK from './modules/mapVSK'
 import moduleUser from './modules/user'
+import moduleSP from './modules/SP'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       moduleMapVSK,
-      moduleUser
+      moduleUser,
+      moduleSP
     },
 
     // enable strict mode (adds overhead!)

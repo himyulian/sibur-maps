@@ -6,7 +6,7 @@ sp.setup({
     headers: {
       Accept: 'application/json;odata=verbose'
     },
-    baseUrl: 'https://sharepoint/orgunits/vsk/'
+    baseUrl: 'https://sharepoint/orgunits/vsk/map'
   }
 })
 

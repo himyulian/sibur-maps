@@ -11,6 +11,7 @@
 			@update:zoom="zoomUpdated"
 			@update:center="centerUpdated"
 			@update:bounds="boundsUpdated"
+      @click="onClick"
 		>
 			<l-tile-layer :url="tile.url" :options="tile.options"></l-tile-layer>
 
@@ -20,7 +21,6 @@
 				:geojson="getFeaturesVSKMainConstrunctions"
 				:optionsStyle="styles.construnctions"
 				:options="options"
-				@click="onClick"
 			></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.b" :options="options"></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
@@ -49,7 +49,8 @@ export default {
   },
   methods: {
     onClick(event) {
-      console.log('event', event)
+      console.log('event', event.latlng)
+      this.addItem(event.latlng)
     },
     zoomUpdated (zoom) {
       this.setZoom(zoom)
@@ -61,7 +62,8 @@ export default {
       this.setBounds(bounds)
     },
     ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
-    ...mapActions('moduleMapVSK', ['fetchMapVSK'])
+    ...mapActions('moduleMapVSK', ['fetchMapVSK']),
+    ...mapActions('moduleSP', ['addItem', 'fetchItemsFromSP'])
   },
   computed: {
     ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
@@ -85,6 +87,7 @@ export default {
   watch: {  },
   created () {
     this.fetchMapVSK()
+    this.fetchItemsFromSP()
   },
   mounted() {
     const map = this.$refs.VSK.mapObject;
