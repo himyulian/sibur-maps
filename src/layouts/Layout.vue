@@ -15,7 +15,8 @@
 				<q-item>
 					<q-item-section avatar>
 						<q-avatar color="primary" text-color="white">
-							<img :src="currentUser && currentUser.PictureUrl || '../statics/user.svg'" />
+							<img v-if="currentUser && currentUser.PictureUrl" :src="currentUser && currentUser.PictureUrl" />
+							<q-icon v-else name="fas fa-user" />
 						</q-avatar>
 					</q-item-section>
 					<q-item-section>
