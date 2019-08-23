@@ -7978,7 +7978,7 @@ vue2-leaflet@^2.1.1:
   resolved "https://registry.npmjs.org/vue2-leaflet/-/vue2-leaflet-2.2.1.tgz#cd67274951751a33df147481fce2b956ba174c7e"
   integrity sha512-yBB3Ilv9LTszNn/uxUATq8+Ahw/1FqIasdQehb9m1tJ5T9qeEk8Fr9a6uLzvR+zuz88rnEQVo7/iGUd96E7iLg==
 
-vue@2.6.10:
+vue@2.6.10, vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.npmjs.org/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
