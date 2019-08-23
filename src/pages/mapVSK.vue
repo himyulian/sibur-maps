@@ -1,6 +1,5 @@
 <template>
 	<q-page padding>
-    <button v-stream:click="start$">Click me</button>
     <p>Stream: {{result$}}</p>
 		<l-map
 			ref="VSK"
@@ -28,6 +27,11 @@
 			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
+
+      <l-control position="topleft" >
+        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click="onClick" v-stream:click="start$"/>
+      </l-control>
+
 		</l-map>
 	</q-page>
 </template>
@@ -37,7 +41,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { LMap, LTileLayer, LMarker, LGeoJson } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
 import { interval } from 'rxjs'
 import { 
   scan, 
@@ -73,12 +77,13 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LGeoJson
+    LGeoJson,
+    LControl,
   },
   methods: {
     onClick(event) {
       console.log('event', event.latlng)
-      this.addItem(event.latlng)
+      this.addItemToSP(event.latlng)
     },
     zoomUpdated (zoom) {
       this.setZoom(zoom)
@@ -91,7 +96,7 @@ export default {
     },
     ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
     ...mapActions('moduleMapVSK', ['fetchMapVSK']),
-    ...mapActions('moduleSP', ['addItem', 'fetchItemsFromSP'])
+    ...mapActions('moduleSP', ['addItemToSP', 'fetchItemsFromSP'])
   },
   computed: {
     ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
@@ -119,6 +124,8 @@ export default {
   },
   mounted() {
     const map = this.$refs.VSK.mapObject;
+    console.log(this.$refs.VSK.mapObject);
+    map._container.style.cursor = 'crosshair'
     map.createPane('construnctions');
     map.createPane('railways');
     map.getPane('construnctions').style.zIndex = 650;
