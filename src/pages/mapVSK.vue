@@ -1,5 +1,7 @@
 <template>
 	<q-page padding>
+    <button v-stream:click="start$">Click me</button>
+    <p>Stream: {{result$}}</p>
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-80px + 100vh);"
@@ -36,10 +38,36 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LGeoJson } from 'vue2-leaflet'
+import { interval } from 'rxjs'
+import { 
+  scan, 
+  startWith, 
+  takeWhile, 
+  switchMap, 
+  repeatWhen, 
+} from 'rxjs/operators'
 
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
+  domStreams: ['start$'],
+  subscriptions() {
+
+    const click$ = this.start$.pipe(
+      switchMap(() => interval$)
+    )
+
+    const interval$ = interval(250).pipe(
+      startWith(5),
+      scan(time => time - 1),
+      takeWhile(time => time > 0),
+      repeatWhen(() => this.start$)
+    )
+
+    return {
+      result$: click$
+    }
+  },
   name: 'PageMapVSK',
   components: {
     LMap,
