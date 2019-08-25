@@ -46,6 +46,5 @@ export default {
   markers: {
     m1: [51.62806, 39.233891]
   },
-  newMarkers: [],
   mapVSK: null
 }

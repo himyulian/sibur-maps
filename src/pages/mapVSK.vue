@@ -1,9 +1,8 @@
 <template>
-	<q-page padding>
-    <p>Stream: {{result$}}</p>
+	<q-page>
 		<l-map
 			ref="VSK"
-			style="min-height: calc(-80px + 100vh);"
+			style="min-height: calc(-50px + 100vh);"
 			:crs="mapInstanceVSK.crs"
 			:key="mapInstanceVSK.crs.code"
 			:zoom="mapInstanceVSK.zoom"
@@ -22,19 +21,18 @@
 				:optionsStyle="styles.construnctions"
 				:options="options"
 			></l-geo-json>
-			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.b" :options="options"></l-geo-json>
-			<l-geo-json :geojson="getFeaturesVSKMainRailways" :optionsStyle="styles.railways.w" :options="options"></l-geo-json>
+			<l-geo-json
+				:geojson="getFeaturesVSKMainRailways"
+				:optionsStyle="styles.railways.b"
+				:options="options"
+			></l-geo-json>
+			<l-geo-json
+				:geojson="getFeaturesVSKMainRailways"
+				:optionsStyle="styles.railways.w"
+				:options="options"
+			></l-geo-json>
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
-
-      <l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker"></l-marker>
-      
-      <l-marker v-for="(marker, idx) in newMarkers" :key="idx" :lat-lng="marker.getLatLng()"></l-marker>
-
-      <l-control position="topleft">
-        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop v-stream:click="buttonAddMarker$"/>
-      </l-control>
-
 		</l-map>
 	</q-page>
 </template>
@@ -43,57 +41,15 @@
 </style>
 
 <script>
-import 'leaflet-draw/dist/leaflet.draw'
-import L, { DomEvent, DomUtil } from 'leaflet'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
-import { interval, fromEvent } from 'rxjs'
-import { 
-  scan, 
-  startWith, 
-  takeWhile, 
-  takeUntil, 
-  switchMap, 
-  repeatWhen, 
-  tap, 
-  take, 
-  map, 
-} from 'rxjs/operators'
+
+import L from 'leaflet'
+import 'leaflet-draw/dist/leaflet.draw'
 
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
-  domStreams: ['buttonAddMarker$'],
-  subscriptions() {
-
-    // const marker = L.marker([51.629006, 39.237242])
-    const click$ = this.buttonAddMarker$.pipe(
-      tap((e) => {
-        e.data = {
-          // index: this.setNewMarker(L.marker([51.629006, 39.237242])),
-          // latlng: null,
-          marker: L.marker([51.629006, 39.237242]).addTo(this.$refs.VSK.mapObject)
-        }
-        // this.getMarker()
-      }),
-      switchMap((firstEvent) => fromEvent(this.$refs.VSK.$el, 'mousemove').pipe(
-        map((event) => {
-          const latlng = this.$refs.VSK.mapObject.mouseEventToLatLng(event)
-          DomEvent.preventDefault(event)
-          // firstEvent.data.latlng = latlng
-          return latlng;
-        }),
-        tap(v => firstEvent.data.marker.setLatLng(v)),
-        // tap(() => this.setMarkerLatLng(firstEvent.data.index, firstEvent.data.latlng)),
-        takeUntil(fromEvent(this.$refs.VSK.$el, 'click'))
-        // tap(point => this.addItemToSP(point))
-      ))
-    )
-
-    return {
-      result$: click$
-    }
-  },
   name: 'PageMapVSK',
   components: {
     LMap,
@@ -115,13 +71,13 @@ export default {
     boundsUpdated (bounds) {
       this.setBounds(bounds)
     },
-    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds', 'setNewMarker', 'setMarkerLatLng']),
+    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
     ...mapActions('moduleMapVSK', ['fetchMapVSK']),
     ...mapActions('moduleSP', ['addItemToSP', 'fetchItemsFromSP'])
   },
   computed: {
-    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers', 'newMarkers']),
-    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads', 'getMarker']),
+    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
+    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads']),
     ...mapGetters('moduleSP', ['getMarkers']),
     options() {
       return {
@@ -152,11 +108,9 @@ export default {
     map.getPane('railways').style.zIndex = 600;
 
 
-    // ************
-
     var editableLayers = new L.FeatureGroup();
         map.addLayer(editableLayers);
-        
+
         var MyCustomMarker = L.Icon.extend({
             options: {
                 shadowUrl: null,
@@ -165,10 +119,13 @@ export default {
                 iconUrl: 'link/to/image.png'
             }
         });
-        
+
         var options = {
             position: 'topleft',
             draw: {
+                marker: {
+                    // icon: new MyCustomMarker()
+                },
                 polyline: false /* {
                     shapeOptions: {
                         color: '#f357a1',
@@ -187,37 +144,141 @@ export default {
                 } */,
                 circle: false, // Turns off this drawing tool
                 circlemarker: false, // Turns off this drawing tool
-                rectangle: {
+                rectangle: false/* {
                     shapeOptions: {
                         clickable: false
                     }
-                },
-                marker: {
-                    // icon: new MyCustomMarker()
-                }
+                } */
             }
             // edit: {
             //     featureGroup: editableLayers, //REQUIRED!!
             //     remove: false
             // }
         };
-        
+
+        L.drawLocal = {
+          draw: {
+            toolbar: {
+              // #TODO: this should be reorganized where actions are nested in actions
+              // ex: actions.undo  or actions.cancel
+              actions: {
+                title: 'Отменить добавление',
+                text: 'Отмена'
+              },
+              finish: {
+                title: '- your text-',
+                text: '- your text-'
+              },
+              undo: {
+                title: '- your text-',
+                text: '- your text-'
+              },
+              buttons: {
+                polyline: '- your text-',
+                polygon: '- your text-',
+                rectangle: '- your text-',
+                circle: '- your text-',
+                marker: 'Добавить маркер',
+                circlemarker: '- your text-'
+              }
+            },
+            handlers: {
+              circle: {
+                tooltip: {
+                  start: '- your text-'
+                },
+                radius: '- your text-'
+              },
+              circlemarker: {
+                tooltip: {
+                  start: '- your text-.'
+                }
+              },
+              marker: {
+                tooltip: {
+                  start: 'Выберите место на карте'
+                }
+              },
+              polygon: {
+                tooltip: {
+                  start: '- your text-.',
+                  cont: '- your text-.',
+                  end: '- your text-.'
+                }
+              },
+              polyline: {
+                error: '<strong>Error:</strong> shape edges cannot cross!',
+                tooltip: {
+                  start: 'Click to start drawing line.',
+                  cont: 'Click to continue drawing line.',
+                  end: 'Click last point to finish line.'
+                }
+              },
+              rectangle: {
+                tooltip: {
+                  start: '- your text-.'
+                }
+              },
+              simpleshape: {
+                tooltip: {
+                  end: 'Release mouse to finish drawing.'
+                }
+              }
+            }
+          },
+          edit: {
+            toolbar: {
+              actions: {
+                save: {
+                  title: 'Save changes',
+                  text: 'Save'
+                },
+                cancel: {
+                  title: 'Cancel editing, discards all changes',
+                  text: 'Cancel'
+                },
+                clearAll: {
+                  title: 'Clear all layers',
+                  text: 'Clear All'
+                }
+              },
+              buttons: {
+                edit: 'Edit layers',
+                editDisabled: 'No layers to edit',
+                remove: 'Delete layers',
+                removeDisabled: 'No layers to delete'
+              }
+            },
+            handlers: {
+              edit: {
+                tooltip: {
+                  text: 'Drag handles or markers to edit features.',
+                  subtext: 'Click cancel to undo changes.'
+                }
+              },
+              remove: {
+                tooltip: {
+                  text: 'Click on a feature to remove.'
+                }
+              }
+            }
+          }
+        };
+
         var drawControl = new L.Control.Draw(options);
         map.addControl(drawControl);
-        
+
         map.on(L.Draw.Event.CREATED, function (e) {
             var type = e.layerType,
                 layer = e.layer;
-        
+
             if (type === 'marker') {
                 layer.bindPopup('A popup!');
             }
-        
+
             console.log(e);
             editableLayers.addLayer(layer);
         });
-
-    // ************
 
   }
 }
