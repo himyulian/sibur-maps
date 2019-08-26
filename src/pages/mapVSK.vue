@@ -12,7 +12,6 @@
 			@update:zoom="zoomUpdated"
 			@update:center="centerUpdated"
 			@update:bounds="boundsUpdated"
-      @click="onClick"
 		>
 			<l-tile-layer :url="tile.url" :options="tile.options"></l-tile-layer>
 
@@ -28,8 +27,8 @@
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
 
-      <l-control position="topleft" >
-        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click="onClick" v-stream:click="start$"/>
+      <l-control position="topleft">
+        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop v-stream:click="buttonAddMarker$"/>
       </l-control>
 
 		</l-map>
@@ -40,32 +39,33 @@
 </style>
 
 <script>
+import { DomEvent, DomUtil } from 'leaflet'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
-import { interval } from 'rxjs'
+import { interval, fromEvent } from 'rxjs'
 import { 
   scan, 
   startWith, 
   takeWhile, 
   switchMap, 
   repeatWhen, 
+  tap, 
+  take, 
+  map, 
 } from 'rxjs/operators'
 
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
-  domStreams: ['start$'],
+  domStreams: ['buttonAddMarker$'],
   subscriptions() {
 
-    const click$ = this.start$.pipe(
-      switchMap(() => interval$)
-    )
-
-    const interval$ = interval(250).pipe(
-      startWith(5),
-      scan(time => time - 1),
-      takeWhile(time => time > 0),
-      repeatWhen(() => this.start$)
+    const click$ = this.buttonAddMarker$.pipe(
+      switchMap(() => fromEvent(this.$refs.VSK.$el, 'click').pipe(
+        take(1),
+        tap((event) => console.log(this.$refs.VSK.mapObject.layerPointToLatLng(DomEvent.getMousePosition(event)))),
+        map((event) => this.$refs.VSK.mapObject.layerPointToLatLng(DomEvent.getMousePosition(event)))
+      ))
     )
 
     return {
@@ -124,8 +124,6 @@ export default {
   },
   mounted() {
     const map = this.$refs.VSK.mapObject;
-    console.log(this.$refs.VSK.mapObject);
-    map._container.style.cursor = 'crosshair'
     map.createPane('construnctions');
     map.createPane('railways');
     map.getPane('construnctions').style.zIndex = 650;
