@@ -1,3 +1,3 @@
-export function getCurrentUser (state) {
-  return state.currentUser
+export function getMarkers (state) {
+  return state.items && state.items.map(v => v.CoordPoint.split(', ').map(v => Number(v)))
 }

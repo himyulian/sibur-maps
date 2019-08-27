@@ -1,6 +1,6 @@
 <template>
 	<q-page padding>
-    <p>Stream: {{result$}}</p>
+    <p>Stream: {{}}</p>
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-80px + 100vh);"
@@ -27,8 +27,10 @@
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
 
+      <l-marker v-for="marker in getMarkers" :key="marker" :lat-lng="marker"></l-marker>
+
       <l-control position="topleft">
-        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop v-stream:click="buttonAddMarker$"/>
+        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop/>
       </l-control>
 
 		</l-map>
@@ -39,7 +41,8 @@
 </style>
 
 <script>
-import { DomEvent, DomUtil } from 'leaflet'
+import 'leaflet-draw/dist/leaflet.draw'
+import L, { DomEvent, DomUtil } from 'leaflet'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
 import { interval, fromEvent } from 'rxjs'
@@ -57,21 +60,29 @@ import {
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
-  domStreams: ['buttonAddMarker$'],
-  subscriptions() {
+  //  v-stream:click="buttonAddMarker$"
+  // domStreams: ['buttonAddMarker$'],
+  // subscriptions() {
 
-    const click$ = this.buttonAddMarker$.pipe(
-      switchMap(() => fromEvent(this.$refs.VSK.$el, 'click').pipe(
-        take(1),
-        tap((event) => console.log(this.$refs.VSK.mapObject.layerPointToLatLng(DomEvent.getMousePosition(event)))),
-        map((event) => this.$refs.VSK.mapObject.layerPointToLatLng(DomEvent.getMousePosition(event)))
-      ))
-    )
+  //   const marker = L.marker([0, 0])
+  //   const click$ = this.buttonAddMarker$.pipe(
+  //     tap(() => marker.addTo(this.$refs.VSK.mapObject)),
+  //     switchMap(() => fromEvent(this.$refs.VSK.$el, 'mousemove').pipe(
+  //       map((event) => {
+  //         const mousePos = DomEvent.getMousePosition(event, this.$refs.VSK.$el)
+  //         const layerPoint = this.$refs.VSK.mapObject.containerPointToLayerPoint(mousePos)
+  //         const latlng = this.$refs.VSK.mapObject.layerPointToLatLng(layerPoint)
+  //         return latlng;
+  //       }),
+  //       tap(v => marker.setLatLng(v)),
+  //       // tap(point => this.addItemToSP(point))
+  //     ))
+  //   )
 
-    return {
-      result$: click$
-    }
-  },
+  //   return {
+  //     result$: click$
+  //   }
+  // },
   name: 'PageMapVSK',
   components: {
     LMap,
@@ -82,7 +93,6 @@ export default {
   },
   methods: {
     onClick(event) {
-      console.log('event', event.latlng)
       this.addItemToSP(event.latlng)
     },
     zoomUpdated (zoom) {
@@ -101,6 +111,7 @@ export default {
   computed: {
     ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
     ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads']),
+    ...mapGetters('moduleSP', ['getMarkers']),
     options() {
       return {
         onEachFeature: this.onEachFeatureFunction
@@ -128,6 +139,75 @@ export default {
     map.createPane('railways');
     map.getPane('construnctions').style.zIndex = 650;
     map.getPane('railways').style.zIndex = 600;
+
+
+    // ************
+
+    var editableLayers = new L.FeatureGroup();
+        map.addLayer(editableLayers);
+        
+        var MyCustomMarker = L.Icon.extend({
+            options: {
+                shadowUrl: null,
+                iconAnchor: new L.Point(12, 12),
+                iconSize: new L.Point(24, 24),
+                iconUrl: 'link/to/image.png'
+            }
+        });
+        
+        var options = {
+            position: 'topleft',
+            draw: {
+                polyline: false /* {
+                    shapeOptions: {
+                        color: '#f357a1',
+                        weight: 10
+                    }
+                } */,
+                polygon: false /* {
+                    allowIntersection: false, // Restricts shapes to simple polygons
+                    drawError: {
+                        color: '#e1e100', // Color the shape will turn when intersects
+                        message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+                    },
+                    shapeOptions: {
+                        color: '#bada55'
+                    }
+                } */,
+                circle: false, // Turns off this drawing tool
+                circlemarker: false, // Turns off this drawing tool
+                rectangle: {
+                    shapeOptions: {
+                        clickable: false
+                    }
+                },
+                marker: {
+                    // icon: new MyCustomMarker()
+                }
+            }
+            // edit: {
+            //     featureGroup: editableLayers, //REQUIRED!!
+            //     remove: false
+            // }
+        };
+        
+        var drawControl = new L.Control.Draw(options);
+        map.addControl(drawControl);
+        
+        map.on(L.Draw.Event.CREATED, function (e) {
+            var type = e.layerType,
+                layer = e.layer;
+        
+            if (type === 'marker') {
+                layer.bindPopup('A popup!');
+            }
+        
+            console.log(e);
+            editableLayers.addLayer(layer);
+        });
+
+    // ************
+
   }
 }
 </script>

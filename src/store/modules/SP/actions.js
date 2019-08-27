@@ -1,7 +1,6 @@
 import { sp } from '@pnp/sp'
 
 export async function addItemToSP ({ commit, getters }, point) {
-  console.log(`${point.lat}, ${point.lng}`)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
       Title: 'New Item',
@@ -16,7 +15,9 @@ export async function addItemToSP ({ commit, getters }, point) {
 export async function fetchItemsFromSP ({ commit, getters }) {
   try {
     let items = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getAll()
+    commit('setItems', items)
     console.log('items', items)
+    console.log('markers', getters.getMarkers)
   } catch (e) {
     console.error('Ошибка при загрузке записей из реестра', e)
   }

@@ -1,5 +1,6 @@
 import { Icon } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import 'leaflet-draw/dist/leaflet.draw.css'
 
 // "async" is optional
 export default async ({ /* app, router, Vue, ... */ }) => {
