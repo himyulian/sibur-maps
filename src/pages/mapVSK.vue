@@ -1,6 +1,6 @@
 <template>
 	<q-page padding>
-    <p>Stream: {{}}</p>
+    <p>Stream: {{result$}}</p>
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-80px + 100vh);"
@@ -27,10 +27,12 @@
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
 
-      <l-marker v-for="marker in getMarkers" :key="marker" :lat-lng="marker"></l-marker>
+      <l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker"></l-marker>
+      
+      <l-marker v-for="(marker, idx) in newMarkers" :key="idx" :lat-lng="marker.getLatLng()"></l-marker>
 
       <l-control position="topleft">
-        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop/>
+        <q-btn push color="white" text-color="primary" label="Добавить маркер" @click.stop v-stream:click="buttonAddMarker$"/>
       </l-control>
 
 		</l-map>
@@ -50,6 +52,7 @@ import {
   scan, 
   startWith, 
   takeWhile, 
+  takeUntil, 
   switchMap, 
   repeatWhen, 
   tap, 
@@ -60,29 +63,37 @@ import {
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
-  //  v-stream:click="buttonAddMarker$"
-  // domStreams: ['buttonAddMarker$'],
-  // subscriptions() {
+  domStreams: ['buttonAddMarker$'],
+  subscriptions() {
 
-  //   const marker = L.marker([0, 0])
-  //   const click$ = this.buttonAddMarker$.pipe(
-  //     tap(() => marker.addTo(this.$refs.VSK.mapObject)),
-  //     switchMap(() => fromEvent(this.$refs.VSK.$el, 'mousemove').pipe(
-  //       map((event) => {
-  //         const mousePos = DomEvent.getMousePosition(event, this.$refs.VSK.$el)
-  //         const layerPoint = this.$refs.VSK.mapObject.containerPointToLayerPoint(mousePos)
-  //         const latlng = this.$refs.VSK.mapObject.layerPointToLatLng(layerPoint)
-  //         return latlng;
-  //       }),
-  //       tap(v => marker.setLatLng(v)),
-  //       // tap(point => this.addItemToSP(point))
-  //     ))
-  //   )
+    // const marker = L.marker([51.629006, 39.237242])
+    const click$ = this.buttonAddMarker$.pipe(
+      tap((e) => {
+        e.data = {
+          // index: this.setNewMarker(L.marker([51.629006, 39.237242])),
+          // latlng: null,
+          marker: L.marker([51.629006, 39.237242]).addTo(this.$refs.VSK.mapObject)
+        }
+        // this.getMarker()
+      }),
+      switchMap((firstEvent) => fromEvent(this.$refs.VSK.$el, 'mousemove').pipe(
+        map((event) => {
+          const latlng = this.$refs.VSK.mapObject.mouseEventToLatLng(event)
+          DomEvent.preventDefault(event)
+          // firstEvent.data.latlng = latlng
+          return latlng;
+        }),
+        tap(v => firstEvent.data.marker.setLatLng(v)),
+        // tap(() => this.setMarkerLatLng(firstEvent.data.index, firstEvent.data.latlng)),
+        takeUntil(fromEvent(this.$refs.VSK.$el, 'click'))
+        // tap(point => this.addItemToSP(point))
+      ))
+    )
 
-  //   return {
-  //     result$: click$
-  //   }
-  // },
+    return {
+      result$: click$
+    }
+  },
   name: 'PageMapVSK',
   components: {
     LMap,
@@ -104,13 +115,13 @@ export default {
     boundsUpdated (bounds) {
       this.setBounds(bounds)
     },
-    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
+    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds', 'setNewMarker', 'setMarkerLatLng']),
     ...mapActions('moduleMapVSK', ['fetchMapVSK']),
     ...mapActions('moduleSP', ['addItemToSP', 'fetchItemsFromSP'])
   },
   computed: {
-    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
-    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads']),
+    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers', 'newMarkers']),
+    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads', 'getMarker']),
     ...mapGetters('moduleSP', ['getMarkers']),
     options() {
       return {

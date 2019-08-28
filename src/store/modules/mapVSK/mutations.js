@@ -17,3 +17,12 @@ export function setBounds (state, bounds) {
 export function setMapVSK (state, geojsonData) {
   state.mapVSK = geojsonData
 }
+
+export function setNewMarker (state, data) {
+  // * добавляет новый маркер и возвращает его индекс
+  return state.newMarkers.push(data) - 1
+}
+
+export function setMarkerLatLng (state, idx, latlng) {
+  state.newMarkers[idx].setLatLng(latlng)
+}
