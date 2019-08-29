@@ -1,5 +1,6 @@
 <template>
 	<q-page>
+    <q-btn label="dyalogIsActive" color="primary" @click="dyalogIsActive = true" />
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-50px + 100vh);"
@@ -33,7 +34,49 @@
 			></l-geo-json>
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
+			
+      <l-marker v-for="(marker, idx) in newMarkers" :key="idx" :lat-lng="marker"></l-marker>
+
 		</l-map>
+
+    <q-dialog v-model="dyalogIsActive" persistent>
+      <q-card style="min-width: 400px" class="q-pa-md">
+
+        <q-form @submit.prevent.stop="onSubmit" @reset="onReset" class="q-gutter-md">
+
+          <q-card-section>
+            <div class="text-h6">Введите данные</div>
+          </q-card-section>
+
+          <q-card-section>
+            <q-input
+              dense 
+              filled
+              autogrow
+              v-model="title" 
+              label="Название"
+              :rules="[val => !!val || 'Поле обязательно для заполнения']"
+            />
+            <q-input
+              dense 
+              filled
+              autogrow
+              v-model="work"
+              label="Вид работы"
+              :rules="[val => !!val || 'Поле обязательно для заполнения']"
+            />
+          </q-card-section>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset"/>
+            <q-btn :loading="loading" color="primary" label="Сохранить" type="submit"/>
+          </q-card-actions>
+
+        </q-form>
+        
+      </q-card>
+    </q-dialog>
+
 	</q-page>
 </template>
 
@@ -50,6 +93,15 @@ import 'leaflet-draw/dist/leaflet.draw'
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
+  data() {
+    return {
+      loading: false,
+      dyalogIsActive: false,
+
+      title: null,
+      work: null,
+    }
+  },
   name: 'PageMapVSK',
   components: {
     LMap,
@@ -59,6 +111,41 @@ export default {
     LControl,
   },
   methods: {
+
+    onSubmit () {
+      // we set loading state
+      this.loading = true
+      // simulate a delay
+      setTimeout(() => {
+        // we're done, we reset loading state
+        this.loading = false
+        this.dyalogIsActive = false
+
+        this.title = null
+        this.work = null
+
+        console.log('dyalogIsActive false')
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'fas fa-check-circle',
+          message: 'Маркер добавлен на карту'
+        })
+
+      }, 3000)
+    },
+    onReset () {
+      this.title = null
+      this.work = null
+
+      this.$q.notify({
+        color: 'red-4',
+        textColor: 'white',
+        icon: 'fas fa-exclamation-circle',
+        message: '!!!!!!!!!!!!!!!!!!!!!!'
+      })
+    },
+
     onClick(event) {
       this.addItemToSP(event.latlng)
     },
@@ -71,14 +158,19 @@ export default {
     boundsUpdated (bounds) {
       this.setBounds(bounds)
     },
-    ...mapMutations('moduleMapVSK', ['setZoom', 'setCenter', 'setBounds']),
+    ...mapMutations('moduleMapVSK', [
+      'setZoom',
+      'setCenter',
+      'setBounds',
+      'setNewMarker',
+    ]),
     ...mapActions('moduleMapVSK', ['fetchMapVSK']),
-    ...mapActions('moduleSP', ['addItemToSP', 'fetchItemsFromSP'])
+    ...mapActions('moduleSP', [
+      'addItemToSP',
+      'fetchItemsFromSP',
+    ])
   },
   computed: {
-    ...mapState('moduleMapVSK', ['mapInstanceVSK', 'tile', 'styles', 'mapVSK', 'markers']),
-    ...mapGetters('moduleMapVSK', ['getFeaturesVSKMainLanduse', 'getFeaturesVSKMainConstrunctions', 'getFeaturesVSKMainRailways', 'getFeaturesVSKMainRoads']),
-    ...mapGetters('moduleSP', ['getMarkers']),
     options() {
       return {
         onEachFeature: this.onEachFeatureFunction
@@ -93,7 +185,23 @@ export default {
           { permanent: false, sticky: true }
         );
       };
-    }
+    },
+    ...mapState('moduleMapVSK', [
+      'mapInstanceVSK',
+      'tile',
+      'styles',
+      'mapVSK',
+      'markers',
+      'newMarkers',
+    ]),
+    ...mapGetters('moduleMapVSK', [
+      'getFeaturesVSKMainLanduse',
+      'getFeaturesVSKMainConstrunctions',
+      'getFeaturesVSKMainRailways',
+      'getFeaturesVSKMainRoads',
+      'getNewMarker',
+    ]),
+    ...mapGetters('moduleSP', ['getMarkers'])
   },
   watch: {  },
   created () {
@@ -101,6 +209,7 @@ export default {
     this.fetchItemsFromSP()
   },
   mounted() {
+    console.log(this);
     const map = this.$refs.VSK.mapObject;
     map.createPane('construnctions');
     map.createPane('railways');
@@ -268,17 +377,33 @@ export default {
         var drawControl = new L.Control.Draw(options);
         map.addControl(drawControl);
 
-        map.on(L.Draw.Event.CREATED, function (e) {
-            var type = e.layerType,
-                layer = e.layer;
+        const cb = (e) => {
+          var type = e.layerType,
+          layer = e.layer;
+          if (type === 'marker') {
+            layer.bindPopup('A popup!');
+            console.log(this);
+            console.log(layer._latlng);
+            this.setNewMarker(layer._latlng);
+          }
+        }
 
-            if (type === 'marker') {
-                layer.bindPopup('A popup!');
-            }
+        map.on(L.Draw.Event.CREATED, cb);
 
-            console.log(e);
-            editableLayers.addLayer(layer);
-        });
+        // function (e) {
+        //     var type = e.layerType,
+        //         layer = e.layer;
+
+        //     if (type === 'marker') {
+        //         layer.bindPopup('A popup!');
+        //         console.log(this);
+                // this.$store.commit('setNewMarker', layer._latlng);
+        //     }
+
+        //     // console.log('CREATED');
+        //     // console.log(e);
+        //     // editableLayers.addLayer(layer);
+        // }
 
   }
 }
