@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-export async function fetchMapVSK ({
-  commit,
-}) {
+export async function fetchMapVSK ({ commit }) {
   try {
     commit('setLoadingStatus', true)
     let landuse = await axios.get('../../../geoJSON/vsk_main_landuse.geojson')
@@ -20,4 +18,8 @@ export async function fetchMapVSK ({
   } catch (e) {
     console.error('Ошибка при загрузке карты ВСК', e)
   }
+}
+
+export function createdMarkerLatLong ({ commit }, latlng) {
+  commit('setCreatedMarkerLatLong', latlng)
 }

@@ -157,7 +157,10 @@ export default {
       'setBounds',
       'setNewMarker',
     ]),
-    ...mapActions('moduleMapVSK', ['fetchMapVSK']),
+    ...mapActions('moduleMapVSK', [
+      'fetchMapVSK',
+      'createdMarkerLatLong',
+    ]),
     ...mapActions('moduleSP', [
       'addItemToSP',
       'fetchItemsFromSP',
@@ -202,15 +205,15 @@ export default {
     this.fetchItemsFromSP()
   },
   mounted() {
-    const map = this.$refs.VSK.mapObject;
-    map.createPane('construnctions');
-    map.createPane('railways');
-    map.getPane('construnctions').style.zIndex = 650;
-    map.getPane('railways').style.zIndex = 600;
+    const map = this.$refs.VSK.mapObject
+    map.createPane('construnctions')
+    map.createPane('railways')
+    map.getPane('construnctions').style.zIndex = 650
+    map.getPane('railways').style.zIndex = 600
 
 
-    const editableLayers = new L.FeatureGroup();
-    map.addLayer(editableLayers);
+    const editableLayers = new L.FeatureGroup()
+    map.addLayer(editableLayers)
 
     const MyCustomMarker = L.Icon.extend({
       options: {
@@ -219,7 +222,7 @@ export default {
         iconSize: new L.Point(24, 24),
         iconUrl: 'link/to/image.png'
       }
-    });
+    })
 
     const options = {
       position: 'topleft',
@@ -255,7 +258,7 @@ export default {
       //     featureGroup: editableLayers, //REQUIRED!!
       //     remove: false
       // }
-    };
+    }
 
     L.drawLocal = {
       draw: {
@@ -364,23 +367,23 @@ export default {
           }
         }
       }
-    };
+    }
 
-    const drawControl = new L.Control.Draw(options);
-    map.addControl(drawControl);
+    const drawControl = new L.Control.Draw(options)
+    map.addControl(drawControl)
 
     const drawEventCreated = (e) => {
       const type  = e.layerType,
-            layer = e.layer;
+            layer = e.layer
       if (type === 'marker') {
-        layer.bindPopup('A popup!');
-        console.log(layer._latlng);
-        this.setNewMarker(layer._latlng);
+        this.createdMarkerLatLong(layer._latlng)
+        this.dyalogForNewMarker = true
+        // layer.bindPopup('A popup!')
       }
       // editableLayers.addLayer(layer);
     }
 
-    map.on(L.Draw.Event.CREATED, drawEventCreated);
+    map.on(L.Draw.Event.CREATED, drawEventCreated)
 
   }
 }

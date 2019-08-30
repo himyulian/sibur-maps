@@ -18,6 +18,6 @@ export function setMapVSK (state, geojsonData) {
   state.mapVSK = geojsonData
 }
 
-export function setNewMarker (state, marker) {
-  state.newMarkers.push(marker)
+export function setCreatedMarkerLatLong (state, latlng) {
+  state.createdMarkerLatLong = latlng
 }
