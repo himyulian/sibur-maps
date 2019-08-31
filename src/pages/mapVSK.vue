@@ -54,14 +54,6 @@
 							label="Название"
 							:rules="[val => !!val || 'Поле обязательно для заполнения']"
 						/>
-						<q-input
-							dense
-							filled
-							autogrow
-							v-model="work"
-							label="Вид работы"
-							:rules="[val => !!val || 'Поле обязательно для заполнения']"
-						/>
 					</q-card-section>
 
 					<q-card-section align="right" class="text-primary">
@@ -93,7 +85,6 @@ export default {
       dyalogForNewMarker: false,
 
       title: null,
-      work: null,
     }
   },
   name: 'PageMapVSK',
@@ -116,7 +107,6 @@ export default {
         this.dyalogForNewMarker = false
 
         this.title = null
-        this.work = null
 
         this.$q.notify({
           color: 'green-4',
@@ -129,7 +119,6 @@ export default {
     },
     onReset () {
       this.title = null
-      this.work = null
 
       this.$q.notify({
         color: 'red-4',
@@ -158,12 +147,12 @@ export default {
       'setNewMarker',
     ]),
     ...mapActions('moduleMapVSK', [
-      'fetchMapVSK',
-      'createdMarkerLatLong',
+      'actFetchMapVSK',
     ]),
     ...mapActions('moduleSP', [
-      'addItemToSP',
-      'fetchItemsFromSP',
+      'actAddItemToSP',
+      'actFetchItemsFromSP',
+      'actSetNewMarkerLatLng',
     ])
   },
   computed: {
@@ -201,8 +190,8 @@ export default {
   },
   watch: {  },
   created () {
-    this.fetchMapVSK()
-    this.fetchItemsFromSP()
+    this.actFetchMapVSK()
+    this.actFetchItemsFromSP()
   },
   mounted() {
     const map = this.$refs.VSK.mapObject
@@ -376,7 +365,7 @@ export default {
       const type  = e.layerType,
             layer = e.layer
       if (type === 'marker') {
-        this.createdMarkerLatLong(layer._latlng)
+        this.actSetNewMarkerLatLng(layer._latlng)
         this.dyalogForNewMarker = true
         // layer.bindPopup('A popup!')
       }

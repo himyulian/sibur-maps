@@ -1,4 +1,6 @@
 export default {
   loading: false,
-  items: null
+  items: null,
+  newMarkerLatLng: null,
+  newMarkers: [],
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export async function fetchMapVSK ({ commit }) {
+export async function actFetchMapVSK ({ commit }) {
   try {
     commit('setLoadingStatus', true)
     let landuse = await axios.get('../../../geoJSON/vsk_main_landuse.geojson')
@@ -20,6 +20,3 @@ export async function fetchMapVSK ({ commit }) {
   }
 }
 
-export function createdMarkerLatLong ({ commit }, latlng) {
-  commit('setCreatedMarkerLatLong', latlng)
-}

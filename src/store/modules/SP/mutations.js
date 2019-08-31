@@ -5,3 +5,7 @@ export function setLoadingStatus (state, status) {
 export function setItems (state, data) {
   state.items = data
 }
+
+export function setNewMarkerLatLng (state, latlng) {
+  state.newMarkerLatLng = latlng
+}
