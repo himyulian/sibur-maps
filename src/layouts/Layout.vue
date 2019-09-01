@@ -81,12 +81,12 @@ export default {
 		}
   },
   computed: {
-		...mapState('moduleUser', ['currentUser']),
-    ...mapGetters('moduleUser', ['getCurrentUserCompany'])
+		...mapState('user', ['currentUser']),
+    ...mapGetters('user', ['getCurrentUserCompany'])
   },
 	methods: {
 		openURL,
-		...mapActions('moduleUser', ['fetchCurrentUser'])
+		...mapActions('user', ['fetchCurrentUser'])
   },
   created() {
 		this.fetchCurrentUser()

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import moduleMapVSK from './modules/mapVSK'
-import moduleUser from './modules/user'
-import moduleSP from './modules/SP'
+import mapVSK from './modules/mapVSK'
+import user from './modules/user'
+import SP from './modules/SP'
 
 Vue.use(Vuex)
 
@@ -15,9 +15,9 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      moduleMapVSK,
-      moduleUser,
-      moduleSP
+      mapVSK,
+      user,
+      SP,
     },
 
     // enable strict mode (adds overhead!)

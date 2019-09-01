@@ -1,6 +1,5 @@
 <template>
 	<q-page>
-		<q-btn label="dyalogForNewMarker" color="primary" @click="dyalogForNewMarker = true" />
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-50px + 100vh);"
@@ -40,7 +39,7 @@
 
 		<q-dialog v-model="dyalogForNewMarker" persistent>
 			<q-card style="min-width: 400px" class="q-pa-md">
-				<q-form @submit.prevent.stop="onSubmit" @reset="onReset" class="q-gutter-md">
+				<q-form @submit.prevent.stop="onSubmitMarker" @reset="onResetMarker" class="q-gutter-md">
 					<q-card-section>
 						<div class="text-h6">Введите данные</div>
 					</q-card-section>
@@ -70,6 +69,8 @@
 </style>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
 
@@ -79,14 +80,6 @@ import 'leaflet-draw/dist/leaflet.draw'
 import PopupContent from "../components/GeoJson2Popup"
 
 export default {
-  data() {
-    return {
-      loading: false,
-      dyalogForNewMarker: false,
-
-      title: null,
-    }
-  },
   name: 'PageMapVSK',
   components: {
     LMap,
@@ -95,65 +88,11 @@ export default {
     LGeoJson,
     LControl,
   },
-  methods: {
-
-    onSubmit () {
-      // we set loading state
-      this.loading = true
-      // simulate a delay
-      setTimeout(() => {
-        // we're done, we reset loading state
-        this.loading = false
-        this.dyalogForNewMarker = false
-
-        this.title = null
-
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'fas fa-check-circle',
-          message: 'Маркер добавлен на карту'
-        })
-
-      }, 3000)
-    },
-    onReset () {
-      this.title = null
-
-      this.$q.notify({
-        color: 'red-4',
-        textColor: 'white',
-        icon: 'fas fa-exclamation-circle',
-        message: '!!!!!!!!!!!!!!!!!!!!!!'
-      })
-    },
-
-    onClick(event) {
-      this.addItemToSP(event.latlng)
-    },
-    zoomUpdated (zoom) {
-      this.setZoom(zoom)
-    },
-    centerUpdated (center) {
-      this.setCenter(center)
-    },
-    boundsUpdated (bounds) {
-      this.setBounds(bounds)
-    },
-    ...mapMutations('moduleMapVSK', [
-      'setZoom',
-      'setCenter',
-      'setBounds',
-      'setNewMarker',
-    ]),
-    ...mapActions('moduleMapVSK', [
-      'actFetchMapVSK',
-    ]),
-    ...mapActions('moduleSP', [
-      'actAddItemToSP',
-      'actFetchItemsFromSP',
-      'actSetNewMarkerLatLng',
-    ])
+  data() {
+    return {
+      point: {},
+      title: null,
+    }
   },
   computed: {
     options() {
@@ -171,7 +110,8 @@ export default {
         );
       };
     },
-    ...mapState('moduleMapVSK', [
+    ...mapFields('SP', ['dyalogForNewMarker', 'loading']),
+    ...mapState('mapVSK', [
       'mapInstanceVSK',
       'tile',
       'styles',
@@ -179,14 +119,52 @@ export default {
       'markers',
       'newMarkers',
     ]),
-    ...mapGetters('moduleMapVSK', [
+    ...mapGetters('mapVSK', [
       'getFeaturesVSKMainLanduse',
       'getFeaturesVSKMainConstrunctions',
       'getFeaturesVSKMainRailways',
       'getFeaturesVSKMainRoads',
       'getNewMarker',
     ]),
-    ...mapGetters('moduleSP', ['getMarkers'])
+    ...mapGetters('SP', ['getMarkers'])
+  },
+  methods: {
+    onSubmitMarker () {
+      this.actAddItemToSP({
+        title: this.title,
+        point: this.point,
+      })
+    },
+    onResetMarker () {
+      this.title = null
+    },
+
+    zoomUpdated (zoom) {
+      this.setZoom(zoom)
+    },
+    centerUpdated (center) {
+      this.setCenter(center)
+    },
+    boundsUpdated (bounds) {
+      this.setBounds(bounds)
+    },
+    ...mapMutations('mapVSK', [
+      'setZoom',
+      'setCenter',
+      'setBounds',
+      'setNewMarker',
+    ]),
+    ...mapMutations('SP', [
+      'setDyalogForNewMarker',
+    ]),
+    ...mapActions('mapVSK', [
+      'actFetchMapVSK',
+    ]),
+    ...mapActions('SP', [
+      'actAddItemToSP',
+      'actFetchItemsFromSP',
+      'actSetNewMarkerLatLng',
+    ])
   },
   watch: {  },
   created () {
@@ -364,9 +342,10 @@ export default {
     const drawEventCreated = (e) => {
       const type  = e.layerType,
             layer = e.layer
+
       if (type === 'marker') {
-        this.actSetNewMarkerLatLng(layer._latlng)
         this.dyalogForNewMarker = true
+        this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
       }
       // editableLayers.addLayer(layer);
