@@ -43,6 +43,3 @@ export async function actFetchItemsFromSP ({ commit, getters }) {
   }
 }
 
-export function actSetNewMarkerLatLng ({ commit }, latlng) {
-  commit('setNewMarkerLatLng', latlng)
-}

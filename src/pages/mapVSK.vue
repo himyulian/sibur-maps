@@ -35,7 +35,7 @@
 			<l-marker :lat-lng="markers.m1"></l-marker>
 
 			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker"></l-marker>
-      
+
 		</l-map>
 
 		<q-dialog v-model="dyalogForNewMarker" persistent>
@@ -164,7 +164,6 @@ export default {
     ...mapActions('SP', [
       'actAddItemToSP',
       'actFetchItemsFromSP',
-      'actSetNewMarkerLatLng',
     ])
   },
   watch: {  },

@@ -14,6 +14,6 @@ export function setItems (state, data) {
   state.items = data
 }
 
-export function setNewMarkerLatLng (state, latlng) {
-  state.newMarkerLatLng = latlng
+export function setNewMarker (state, data) {
+  state.newMarkers.push(data)
 }

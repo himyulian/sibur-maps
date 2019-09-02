@@ -4,6 +4,5 @@ export default {
 
   // *
   items: null,
-  newMarkerLatLng: null,
   newMarkers: [],
 }
