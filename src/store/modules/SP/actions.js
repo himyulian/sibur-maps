@@ -3,7 +3,6 @@ import { Notify } from 'quasar'
 
 export async function actAddItemToSP ({ commit, getters }, data) {
   commit('setLoadingStatus', true)
-  console.log(data)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
       Title: data.title,
@@ -11,7 +10,8 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     })
     commit('setLoadingStatus', false)
     commit('setDyalogForNewMarker', false)
-    console.log('addResult', addResult)
+    commit('setNewMarker', addResult.data)
+    console.log('addResult', addResult.data)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
@@ -21,7 +21,6 @@ export async function actAddItemToSP ({ commit, getters }, data) {
   } catch (e) {
     commit('setLoadingStatus', false)
     // commit('setDyalogForNewMarker', false)
-    console.error('Ошибка внесения новой записи в реестр', e)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
