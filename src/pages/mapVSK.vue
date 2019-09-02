@@ -129,7 +129,10 @@ export default {
       'getFeaturesVSKMainRoads',
       'getNewMarker',
     ]),
-    ...mapGetters('SP', ['getMarkers'])
+    ...mapGetters('SP', [
+      'getMarkers',
+      'getNewMarkers',
+    ])
   },
   methods: {
     onSubmitMarker () {

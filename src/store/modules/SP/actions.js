@@ -11,6 +11,8 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     commit('setLoadingStatus', false)
     commit('setDyalogForNewMarker', false)
     commit('setNewMarker', addResult.data)
+
+    console.log('GETTER: - getNewMarkers >>> ', getters.getNewMarkers)
     console.log('addResult', addResult.data)
     Notify.create({
       color: 'green-4',
