@@ -32,11 +32,56 @@
 				:options="options"
 			></l-geo-json>
 
-			<l-marker :lat-lng="markers.m1"></l-marker>
-
-			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint"></l-marker>
+			<l-marker v-for="(marker, idx) in markers" :key="idx" :lat-lng="marker.CoordPoint">
+        <l-popup>
+          <q-card flat class="my-card">
+            <q-card-section>
+              <div class="text-h6">{{marker.Title}}</div>
+              <div class="text-subtitle1">ID: {{marker.Id}}</div>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="deleteMarker(marker)">
+                <q-tooltip>Удалить маркер</q-tooltip>
+              </q-btn>
+            </q-card-actions>
+          </q-card>
+        </l-popup>
+      </l-marker>
+      
+			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint">
+        <l-popup>
+          <q-card flat class="my-card">
+            <q-card-section>
+              <div class="text-h6">{{marker.Title}}</div>
+              <div class="text-subtitle1">ID: {{marker.Id}}</div>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="deleteMarker(marker)">
+                <q-tooltip>Удалить маркер</q-tooltip>
+              </q-btn>
+            </q-card-actions>
+          </q-card>
+        </l-popup>
+      </l-marker>
 			
-      <l-marker v-for="(marker, idx) in getNewMarkers" :key="idx" :lat-lng="marker.CoordPoint"></l-marker>
+      <l-marker v-for="(marker, idx) in getNewMarkers" :key="idx" :lat-lng="marker.CoordPoint">
+        <l-popup>
+          <q-card flat class="my-card">
+            <q-card-section>
+              <div class="text-h6">{{marker.Title}}</div>
+              <div class="text-subtitle1">ID: {{marker.Id}}</div>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="deleteMarker(marker)">
+                <q-tooltip>Удалить маркер</q-tooltip>
+              </q-btn>
+            </q-card-actions>
+          </q-card>
+        </l-popup>
+      </l-marker>
 
 		</l-map>
 
@@ -75,7 +120,7 @@
 import { mapFields } from 'vuex-map-fields'
 
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { LMap, LTileLayer, LMarker, LGeoJson, LControl } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LGeoJson, LControl, LPopup } from 'vue2-leaflet'
 
 import L from 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw'
@@ -90,6 +135,7 @@ export default {
     LMarker,
     LGeoJson,
     LControl,
+    LPopup,
   },
   data() {
     return {
@@ -137,6 +183,9 @@ export default {
     ])
   },
   methods: {
+    deleteMarker(item) {
+      this.actDeleteItemFromSP(item.Id)
+    },
     onSubmitMarker () {
       this.actAddItemToSP({
         title: this.title,
@@ -169,8 +218,9 @@ export default {
       'actFetchMapVSK',
     ]),
     ...mapActions('SP', [
-      'actAddItemToSP',
       'actFetchItemsFromSP',
+      'actAddItemToSP',
+      'actDeleteItemFromSP',
     ])
   },
   watch: {  },
@@ -364,5 +414,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="stylus" scoped>
+  .my-card
+    width 100%
+    max-width 350px
+    min-width 250px
 </style>

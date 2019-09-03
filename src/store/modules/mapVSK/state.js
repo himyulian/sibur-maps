@@ -43,8 +43,22 @@ export default {
       }
     }
   },
-  markers: {
-    m1: [51.62806, 39.233891]
-  },
+  markers: [
+    {
+      Id: 777,
+      Title: 'ЗУ - 1',
+      CoordPoint: [51.629331, 39.231754],
+    },
+    {
+      Id: 888,
+      Title: 'ЗУ - 2',
+      CoordPoint: [51.629024, 39.232452],
+    },
+    {
+      Id: 999,
+      Title: 'Пожарная часть',
+      CoordPoint: [51.628890, 39.233514],
+    },
+  ],
   mapVSK: null,
 }
