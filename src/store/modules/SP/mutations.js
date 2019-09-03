@@ -14,6 +14,6 @@ export function setItems (state, data) {
   state.items = data
 }
 
-export function setNewMarker (state, data) {
+export function setAddNewMarker (state, data) {
   state.newMarkers.push(data)
 }

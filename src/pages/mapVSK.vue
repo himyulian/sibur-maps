@@ -34,9 +34,9 @@
 
 			<l-marker :lat-lng="markers.m1"></l-marker>
 
-			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker"></l-marker>
+			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint"></l-marker>
 			
-      <l-marker v-for="(marker, idx) in getNewMarkers" :key="idx" :lat-lng="marker"></l-marker>
+      <l-marker v-for="(marker, idx) in getNewMarkers" :key="idx" :lat-lng="marker.CoordPoint"></l-marker>
 
 		</l-map>
 
@@ -58,7 +58,7 @@
 						/>
 					</q-card-section>
 
-					<q-card-section align="right" class="text-primary">
+					<q-card-section align="right">
 						<q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset" />
 						<q-btn :loading="loading" color="primary" label="Сохранить" type="submit" />
 					</q-card-section>
@@ -106,9 +106,11 @@ export default {
     onEachFeatureFunction() {
       return (feature, layer) => {
         layer.bindTooltip(
-          '<div>id: ' +
-            feature.properties.id +
-          '</div>',
+          `<div>
+            ID: ${feature.properties.id}
+            <br>
+            Name: ${feature.properties.name}
+          </div>`,
           { permanent: false, sticky: true }
         );
       };
@@ -158,7 +160,7 @@ export default {
       'setZoom',
       'setCenter',
       'setBounds',
-      'setNewMarker',
+      'setAddNewMarker',
     ]),
     ...mapMutations('SP', [
       'setDyalogForNewMarker',
