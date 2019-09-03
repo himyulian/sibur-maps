@@ -17,3 +17,10 @@ export function setItems (state, data) {
 export function setAddNewMarker (state, data) {
   state.newMarkers.push(data)
 }
+
+export function setDeleteNewMarker (state, id) {
+  let index = state.newMarkers.findIndex(v => v.Id === id)
+  if (index !== -1) {
+    state.newMarkers.splice(index, 1)
+  }
+}
