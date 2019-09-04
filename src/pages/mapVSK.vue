@@ -41,22 +41,9 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="dyalogConfirmDelete = true">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
-              <q-dialog v-model="dyalogConfirmDelete" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
-                    <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
-                  </q-card-section>
-
-                  <q-card-actions align="right">
-                    <q-btn flat label="Отмена" color="primary" v-close-popup />
-                    <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(marker)" />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
             </q-card-actions>
           </q-card>
         </l-popup>
@@ -71,22 +58,9 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="dyalogConfirmDelete = true">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
-              <q-dialog v-model="dyalogConfirmDelete" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <q-icon name="warning" class="text-red" style="font-size: 4rem;" />
-                    <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
-                  </q-card-section>
-
-                  <q-card-actions align="right">
-                    <q-btn flat label="Отмена" color="primary" v-close-popup />
-                    <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(marker)" />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
             </q-card-actions>
           </q-card>
         </l-popup>
@@ -101,28 +75,29 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="dyalogConfirmDelete = true">
+              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
-              <q-dialog v-model="dyalogConfirmDelete" persistent>
-                <q-card>
-                  <q-card-section class="row items-center">
-                    <q-icon name="warning" class="text-red" style="font-size: 4rem;" />
-                    <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
-                  </q-card-section>
-
-                  <q-card-actions align="right">
-                    <q-btn flat label="Отмена" color="primary" v-close-popup />
-                    <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(marker)" />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
             </q-card-actions>
           </q-card>
         </l-popup>
       </l-marker>
 
 		</l-map>
+
+    <q-dialog v-model="dyalogConfirmDelete" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
+          <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Отмена" color="primary" v-close-popup />
+          <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(clickedMarker)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
 		<q-dialog v-model="dyalogForNewMarker" persistent>
 			<q-card style="min-width: 400px" class="q-pa-md">
@@ -179,6 +154,7 @@ export default {
   data() {
     return {
       dyalogConfirmDelete: false,
+      clickedMarker: {},
       point: {},
       title: null,
     }
@@ -225,6 +201,7 @@ export default {
   methods: {
     deleteMarker(item) {
       this.actDeleteItemFromSP(item.Id)
+      this.clickedMarker = {}
     },
     onSubmitMarker () {
       this.actAddItemToSP({
