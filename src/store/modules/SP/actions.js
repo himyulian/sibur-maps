@@ -47,6 +47,34 @@ export async function actAddItemToSP ({ commit, getters }, data) {
   }
 }
 
+export async function actUpdateItemToSP ({ commit, getters }, data) {
+  commit('setLoadingStatus', true)
+  try {
+    await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(data.Id).update({
+      Title: data.Title,
+    })
+    commit('setLoadingStatus', false)
+    commit('setDyalogEditMarker', false)
+    commit('setUpdateItem', data)
+    Notify.create({
+      color: 'green-4',
+      textColor: 'white',
+      icon: 'fas fa-check-circle',
+      message: 'Данные сохранены'
+    })
+  } catch (e) {
+    commit('setLoadingStatus', false)
+    // commit('setDyalogEditMarker', false)
+    Notify.create({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'fas fa-exclamation-circle',
+      message: 'Ошибка при сохранении данных'
+    })
+
+  }
+}
+
 export async function actDeleteItemFromSP ({ commit, getters }, id) {
   commit('setLoadingStatus', true)
   try {

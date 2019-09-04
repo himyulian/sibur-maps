@@ -41,7 +41,8 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
+              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
+              <q-btn round color="primary" class="q-mt-sm" size="sm" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
             </q-card-actions>
@@ -58,6 +59,7 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
+              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
               <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
@@ -75,6 +77,7 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
+              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
               <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
@@ -110,6 +113,30 @@
 							filled
 							autogrow
 							v-model="title"
+							label="Название"
+							:rules="[val => !!val || 'Поле обязательно для заполнения']"
+						/>
+					</q-card-section>
+					<q-card-section align="right">
+						<q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset" />
+						<q-btn :loading="loading" color="primary" label="Сохранить" type="submit" />
+					</q-card-section>
+				</q-form>
+			</q-card>
+		</q-dialog>
+
+		<q-dialog v-model="dyalogEditMarker" persistent>
+			<q-card style="min-width: 400px" class="q-pa-md">
+				<q-form @submit.prevent.stop="onSubmitEditMarker(clickedMarker)" @reset="onResetEditMarker" class="q-gutter-md">
+					<q-card-section>
+						<div class="text-h6">Измените необходимые данные</div>
+					</q-card-section>
+					<q-card-section>
+						<q-input
+							dense
+							filled
+							autogrow
+							v-model="clickedMarker.Title"
 							label="Название"
 							:rules="[val => !!val || 'Поле обязательно для заполнения']"
 						/>
@@ -213,6 +240,11 @@ export default {
     onResetMarker () {
       this.title = null
     },
+    onSubmitEditMarker (clickedMarker) {
+      this.actUpdateItemToSP(clickedMarker)
+    },
+    onResetEditMarker () {
+    },
 
     zoomUpdated (zoom) {
       this.setZoom(zoom)
@@ -239,6 +271,7 @@ export default {
     ...mapActions('SP', [
       'actFetchItemsFromSP',
       'actAddItemToSP',
+      'actUpdateItemToSP',
       'actDeleteItemFromSP',
     ])
   },
