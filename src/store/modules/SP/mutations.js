@@ -20,8 +20,6 @@ export function setAddNewMarker (state, data) {
 
 export function setDeleteItem (state, id) {
   let index = state.items.findIndex(v => v.Id === id)
-  console.log("TCL: setDeleteItem -> id", id)
-  console.log("TCL: setDeleteItem -> index", index)
   if (index !== -1) {
     state.items.splice(index, 1)
   }
@@ -29,8 +27,6 @@ export function setDeleteItem (state, id) {
 
 export function setDeleteNewMarker (state, id) {
   let index = state.newMarkers.findIndex(v => v.Id === id)
-  console.log("TCL: setDeleteNewMarker -> id", id)
-  console.log("TCL: setDeleteNewMarker -> index", index)
   if (index !== -1) {
     state.newMarkers.splice(index, 1)
   }

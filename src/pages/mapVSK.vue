@@ -91,9 +91,8 @@
           <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
           <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
         </q-card-section>
-
         <q-card-actions align="right">
-          <q-btn flat label="Отмена" color="primary" v-close-popup />
+          <q-btn flat label="Отмена" color="primary" v-close-popup @click="clickedMarker = {}" />
           <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(clickedMarker)" />
         </q-card-actions>
       </q-card>
@@ -105,7 +104,6 @@
 					<q-card-section>
 						<div class="text-h6">Введите данные</div>
 					</q-card-section>
-
 					<q-card-section>
 						<q-input
 							dense
@@ -116,7 +114,6 @@
 							:rules="[val => !!val || 'Поле обязательно для заполнения']"
 						/>
 					</q-card-section>
-
 					<q-card-section align="right">
 						<q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset" />
 						<q-btn :loading="loading" color="primary" label="Сохранить" type="submit" />
@@ -124,6 +121,7 @@
 				</q-form>
 			</q-card>
 		</q-dialog>
+
 	</q-page>
 </template>
 
@@ -201,7 +199,6 @@ export default {
   methods: {
     deleteMarker(item) {
       this.actDeleteItemFromSP(item.Id)
-      this.clickedMarker = {}
     },
     onSubmitMarker () {
       this.actAddItemToSP({
