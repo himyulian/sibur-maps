@@ -255,7 +255,8 @@ export default {
       'setDyalogForNewMarker',
     ]),
     ...mapActions('mapVSK', [
-      'actFetchMapVSK',
+      'actFetchMapVSKmodeDEV',
+      'actFetchMapVSKmodePROD',
     ]),
     ...mapActions('SP', [
       'actFetchItemsFromSP',
@@ -265,8 +266,12 @@ export default {
   },
   watch: {  },
   created () {
-    this.actFetchMapVSK()
-    this.actFetchItemsFromSP()
+    if (process.env.DEV) {
+      this.actFetchMapVSKmodeDEV()
+    } else if (process.env.PROD) {
+      this.actFetchMapVSKmodePROD()
+      this.actFetchItemsFromSP()
+    }
   },
   mounted() {
     const map = this.$refs.VSK.mapObject
