@@ -1,6 +1,7 @@
 export default {
   loading: false,
-  dyalogForNewMarker: false,
+  dyalogNewMarker: false,
+  dyalogEditMarker: false,
 
   // *
   items: null,

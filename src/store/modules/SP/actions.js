@@ -25,7 +25,7 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     let result = addResult.data
     result.CoordPoint = result.CoordPoint.split(', ').map(v => Number(v))
     commit('setLoadingStatus', false)
-    commit('setDyalogForNewMarker', false)
+    commit('setDyalogNewMarker', false)
     commit('setAddNewMarker', result)
     console.log('addResult', result)
     Notify.create({
@@ -36,7 +36,7 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogForNewMarker', false)
+    // commit('setDyalogNewMarker', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -62,7 +62,7 @@ export async function actDeleteItemFromSP ({ commit, getters }, id) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogForNewMarker', false)
+    // commit('setDyalogNewMarker', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',

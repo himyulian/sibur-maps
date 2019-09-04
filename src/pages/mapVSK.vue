@@ -98,7 +98,7 @@
       </q-card>
     </q-dialog>
 
-		<q-dialog v-model="dyalogForNewMarker" persistent>
+		<q-dialog v-model="dyalogNewMarker" persistent>
 			<q-card style="min-width: 400px" class="q-pa-md">
 				<q-form @submit.prevent.stop="onSubmitMarker" @reset="onResetMarker" class="q-gutter-md">
 					<q-card-section>
@@ -175,7 +175,11 @@ export default {
         );
       };
     },
-    ...mapFields('SP', ['dyalogForNewMarker', 'loading']),
+    ...mapFields('SP', [
+      'dyalogNewMarker',
+      'dyalogEditMarker',
+      'loading',
+    ]),
     ...mapState('mapVSK', [
       'mapInstanceVSK',
       'tile',
@@ -226,7 +230,7 @@ export default {
       'setAddNewMarker',
     ]),
     ...mapMutations('SP', [
-      'setDyalogForNewMarker',
+      'setDyalogNewMarker',
     ]),
     ...mapActions('mapVSK', [
       'actFetchMapVSKmodeDEV',
@@ -420,7 +424,7 @@ export default {
             layer = e.layer
 
       if (type === 'marker') {
-        this.dyalogForNewMarker = true
+        this.dyalogNewMarker = true
         this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
       }
