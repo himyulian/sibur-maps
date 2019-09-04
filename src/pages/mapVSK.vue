@@ -47,7 +47,7 @@
               <q-dialog v-model="dyalogConfirmDelete" persistent>
                 <q-card>
                   <q-card-section class="row items-center">
-                    <q-icon name="warning" class="text-red" style="font-size: 4rem;" />
+                    <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
                     <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
                   </q-card-section>
 

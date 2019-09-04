@@ -52,6 +52,7 @@ export async function actDeleteItemFromSP ({ commit, getters }, id) {
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
+    commit('setDeleteItem', id)
     commit('setDeleteNewMarker', id)
     Notify.create({
       color: 'green-4',
