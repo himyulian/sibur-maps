@@ -4,6 +4,5 @@ export default {
   dyalogEditMarker: false,
   
   // *
-  items: null,
-  newMarkers: [],
+  items: [],
 }

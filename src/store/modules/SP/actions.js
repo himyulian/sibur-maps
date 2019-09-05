@@ -26,7 +26,7 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     result.CoordPoint = result.CoordPoint.split(', ').map(v => Number(v))
     commit('setLoadingStatus', false)
     commit('setDyalogNewMarker', false)
-    commit('setAddNewMarker', result)
+    commit('setAddItem', result)
     console.log('addResult', result)
     Notify.create({
       color: 'green-4',
@@ -81,7 +81,6 @@ export async function actDeleteItemFromSP ({ commit, getters }, id) {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
     commit('setDeleteItem', id)
-    commit('setDeleteNewMarker', id)
     Notify.create({
       color: 'green-4',
       textColor: 'white',

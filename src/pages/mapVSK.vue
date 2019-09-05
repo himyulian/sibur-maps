@@ -32,24 +32,6 @@
 				:options="options"
 			></l-geo-json>
 
-			<l-marker v-for="(marker, idx) in markers" :key="idx" :lat-lng="marker.CoordPoint">
-        <l-popup>
-          <q-card flat class="my-card">
-            <q-card-section>
-              <div class="text-h6">{{marker.Title}}</div>
-              <div class="text-subtitle1">ID: {{marker.Id}}</div>
-            </q-card-section>
-            <q-separator />
-            <q-card-actions align="right">
-              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
-              <q-btn round color="primary" class="q-mt-sm" size="sm" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
-                <q-tooltip>Удалить маркер</q-tooltip>
-              </q-btn>
-            </q-card-actions>
-          </q-card>
-        </l-popup>
-      </l-marker>
-      
 			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint">
         <l-popup>
           <q-card flat class="my-card">
@@ -60,32 +42,14 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
+              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
             </q-card-actions>
           </q-card>
         </l-popup>
       </l-marker>
-			
-      <l-marker v-for="(marker, idx) in getNewMarkers" :key="idx" :lat-lng="marker.CoordPoint">
-        <l-popup>
-          <q-card flat class="my-card">
-            <q-card-section>
-              <div class="text-h6">{{marker.Title}}</div>
-              <div class="text-subtitle1">ID: {{marker.Id}}</div>
-            </q-card-section>
-            <q-separator />
-            <q-card-actions align="right">
-              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
-              <q-btn round color="primary" class="q-mt-sm" size="md" icon="delete_forever" :loading="loading" @click="clickedMarker = marker; dyalogConfirmDelete = true">
-                <q-tooltip>Удалить маркер</q-tooltip>
-              </q-btn>
-            </q-card-actions>
-          </q-card>
-        </l-popup>
-      </l-marker>
-
+ 
 		</l-map>
 
     <q-dialog v-model="dyalogConfirmDelete" persistent>
@@ -213,18 +177,15 @@ export default {
       'styles',
       'mapVSK',
       'markers',
-      'newMarkers',
     ]),
     ...mapGetters('mapVSK', [
       'getFeaturesVSKMainLanduse',
       'getFeaturesVSKMainConstrunctions',
       'getFeaturesVSKMainRailways',
       'getFeaturesVSKMainRoads',
-      'getNewMarker',
     ]),
     ...mapGetters('SP', [
       'getMarkers',
-      'getNewMarkers',
     ])
   },
   methods: {
@@ -259,7 +220,6 @@ export default {
       'setZoom',
       'setCenter',
       'setBounds',
-      'setAddNewMarker',
     ]),
     ...mapMutations('SP', [
       'setDyalogNewMarker',

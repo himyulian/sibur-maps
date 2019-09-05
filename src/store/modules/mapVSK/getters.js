@@ -13,7 +13,3 @@ export function getFeaturesVSKMainRailways (state) {
 export function getFeaturesVSKMainRoads (state) {
   return state.mapVSK && state.mapVSK.roads.features
 }
-
-export function getNewMarker (state, idx) {
-  return state.newMarkers && state.newMarkers[idx]
-}
