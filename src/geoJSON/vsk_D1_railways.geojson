@@ -1,0 +1,13 @@
+{
+"type": "FeatureCollection",
+"name": "vsk_D1_railways",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.262207507711452, 51.625317278934268 ], [ 39.264082480195214, 51.62508395092523 ], [ 39.265013559925201, 51.624919560016536 ], [ 39.268481618368952, 51.624261990425509 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.262403974076506, 51.625294741622099 ], [ 39.262895139989105, 51.625162168971052 ], [ 39.264411347806259, 51.62488641661605 ], [ 39.26637601145665, 51.62449664840949 ], [ 39.268208273861056, 51.624133392032526 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.262954934100208, 51.625223152438679 ], [ 39.26342901598106, 51.625183380621245 ], [ 39.264364366718972, 51.625151563142254 ], [ 39.265803696393299, 51.62489437103438 ], [ 39.267183231956508, 51.624621268540352 ], [ 39.268045975559509, 51.624401194460745 ], [ 39.26850724441654, 51.624318997843964 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.263915910885729, 51.625167471884538 ], [ 39.268075872615036, 51.624398542959312 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.263326511790602, 51.625085276655966 ], [ 39.264274675552329, 51.624828084172329 ], [ 39.26508616706009, 51.624671646793971 ], [ 39.266034330821796, 51.624570890230792 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": null, "type": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 39.263206923568404, 51.625106488342105 ], [ 39.264244778496774, 51.62479626644415 ], [ 39.265415034671129, 51.624483390928631 ], [ 39.268118582694392, 51.623958391572025 ] ] ] } }
+]
+}

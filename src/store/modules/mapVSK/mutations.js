@@ -3,18 +3,18 @@ export function setLoadingStatus (state, status) {
 }
 
 export function setZoom (state, zoom) {
-  state.mapInstanceVSK.zoom = zoom
+  state.mapInstance.zoom = zoom
 }
 
 export function setCenter (state, center) {
-  state.mapInstanceVSK.center = center
+  state.mapInstance.center = center
 }
 
 export function setBounds (state, bounds) {
-  state.mapInstanceVSK.bounds = bounds
+  state.mapInstance.bounds = bounds
 }
 
-export function setMapVSK (state, geojsonData) {
-  state.mapVSK = geojsonData
+export function setMapVSK (state, data) {
+  state.mapVSK = data
 }
 

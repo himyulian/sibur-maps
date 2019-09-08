@@ -3,11 +3,11 @@
 		<l-map
 			ref="VSK"
 			style="min-height: calc(-50px + 100vh);"
-			:crs="mapInstanceVSK.crs"
-			:key="mapInstanceVSK.crs.code"
-			:zoom="mapInstanceVSK.zoom"
-			:center="mapInstanceVSK.center"
-			:padding="mapInstanceVSK.padding"
+			:crs="mapInstance.crs"
+			:key="mapInstance.crs.code"
+			:zoom="mapInstance.zoom"
+			:center="mapInstance.center"
+			:padding="mapInstance.padding"
 			@update:zoom="zoomUpdated"
 			@update:center="centerUpdated"
 			@update:bounds="boundsUpdated"
@@ -16,21 +16,19 @@
 
 			<l-geo-json :geojson="getFeaturesVSKMainLanduse" :optionsStyle="styles.landuse"></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSKMainRoads" :optionsStyle="styles.roads"></l-geo-json>
-			<l-geo-json
-				:geojson="getFeaturesVSKMainConstrunctions"
-				:optionsStyle="styles.construnctions"
-				:options="options"
-			></l-geo-json>
-			<l-geo-json
-				:geojson="getFeaturesVSKMainRailways"
-				:optionsStyle="styles.railways.b"
-				:options="options"
-			></l-geo-json>
-			<l-geo-json
-				:geojson="getFeaturesVSKMainRailways"
-				:optionsStyle="styles.railways.w"
-				:options="options"
-			></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKMainConstrunctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
+			<l-geo-json	:geojson="getFeaturesVSKMainRailways"	:optionsStyle="styles.railways.b"	:options="options"></l-geo-json>
+			<l-geo-json	:geojson="getFeaturesVSKMainRailways"	:optionsStyle="styles.railways.w"	:options="options"></l-geo-json>
+
+			<l-geo-json :geojson="getFeaturesVSKD1Landuse" :optionsStyle="styles.landuse"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKD1Roads" :optionsStyle="styles.roads"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSKD1Construnctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
+			<l-geo-json	:geojson="getFeaturesVSKD1Railways"	:optionsStyle="styles.railways.b"	:options="options"></l-geo-json>
+			<l-geo-json	:geojson="getFeaturesVSKD1Railways"	:optionsStyle="styles.railways.w"	:options="options"></l-geo-json>
+
+			<l-geo-json :geojson="getFeaturesVSK61Landuse" :optionsStyle="styles.landuse"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSK61Roads" :optionsStyle="styles.roads"></l-geo-json>
+			<l-geo-json :geojson="getFeaturesVSK61Construnctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
 
 			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint">
         <l-popup>
@@ -49,7 +47,15 @@
           </q-card>
         </l-popup>
       </l-marker>
- 
+
+      <l-control position="topright" >
+        <div class="column q-gutter-xs">
+          <q-btn round color="accent" label="ВСК" @click="actSetCenter([51.627513, 39.242946])"/>
+          <q-btn round color="accent" label="Д1" @click="actSetCenter([51.62406, 39.26536])"/>
+          <q-btn round color="accent" label="61" @click="actSetCenter([51.59625, 39.22694])"/>
+        </div>
+      </l-control>
+
 		</l-map>
 
     <q-dialog v-model="dyalogConfirmDelete" persistent>
@@ -172,7 +178,7 @@ export default {
       'loading',
     ]),
     ...mapState('mapVSK', [
-      'mapInstanceVSK',
+      'mapInstance',
       'tile',
       'styles',
       'mapVSK',
@@ -183,6 +189,13 @@ export default {
       'getFeaturesVSKMainConstrunctions',
       'getFeaturesVSKMainRailways',
       'getFeaturesVSKMainRoads',
+      'getFeaturesVSKD1Landuse',
+      'getFeaturesVSKD1Construnctions',
+      'getFeaturesVSKD1Railways',
+      'getFeaturesVSKD1Roads',
+      'getFeaturesVSK61Landuse',
+      'getFeaturesVSK61Construnctions',
+      'getFeaturesVSK61Roads',
     ]),
     ...mapGetters('SP', [
       'getMarkers',
@@ -225,6 +238,7 @@ export default {
       'setDyalogNewMarker',
     ]),
     ...mapActions('mapVSK', [
+      'actSetCenter',
       'actFetchMapVSKmodeDEV',
       'actFetchMapVSKmodePROD',
     ]),

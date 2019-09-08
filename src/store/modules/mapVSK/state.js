@@ -2,7 +2,8 @@ import L from 'leaflet'
 
 export default {
   loading: false,
-  mapInstanceVSK: {
+  mapVSK: null,
+  mapInstance: {
     crs: L.CRS.EPSG3395,
     zoom: 16,
     center: [51.627513, 39.242946],
@@ -60,5 +61,4 @@ export default {
       CoordPoint: [51.628890, 39.233514],
     },
   ],
-  mapVSK: null,
 }
