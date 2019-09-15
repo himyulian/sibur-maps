@@ -1,6 +1,6 @@
 import { sp } from '@pnp/sp'
 
-export async function fetchCurrentUser ({ commit }) {
+export async function actFetchCurrentUser ({ commit }) {
   try {
     commit('setLoadingStatus', true)
     let currentUser = await sp.profiles.myProperties.get()

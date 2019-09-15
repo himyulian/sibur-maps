@@ -86,10 +86,12 @@ export default {
   },
 	methods: {
 		openURL,
-		...mapActions('user', ['fetchCurrentUser'])
+		...mapActions('user', ['actFetchCurrentUser'])
   },
   created() {
-		this.fetchCurrentUser()
+    if (process.env.PROD) {
+      this.actFetchCurrentUser()
+    }
   }
 }
 </script>

@@ -8,7 +8,8 @@ module.exports = function (ctx) {
       'axios',
       'spsetup',
       'leaflet-boot',
-      'vuerx'
+      'vuerx',
+      'event-bus',
     ],
 
     css: [
