@@ -26,8 +26,8 @@ module.exports = function (ctx) {
     ],
 
     framework: {
-      // all: true, // --- includes everything; for dev only!
-
+      all: 'auto',
+/*
       components: [
         'QLayout',
         'QHeader',
@@ -59,7 +59,7 @@ module.exports = function (ctx) {
         'Ripple',
         'ClosePopup',
       ],
-
+ */
       // Quasar plugins
       plugins: [
         'Notify'
@@ -74,6 +74,7 @@ module.exports = function (ctx) {
     build: {
       scopeHoisting: true,
       publicPath: '',
+      // sourceMap: true,
       // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,

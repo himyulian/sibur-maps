@@ -7,17 +7,17 @@ export function actSetCenter ({ commit }, center) {
 export async function actFetchMapVSKmodeDEV ({ commit }) {
   try {
     commit('setLoadingStatus', true)
-    let mainLanduse         = await axios.get('../../../geoJSON/vsk_main_landuse.geojson')
-    let mainConstrunctions  = await axios.get('../../../geoJSON/vsk_main_construnctions.geojson')
-    let mainRailways        = await axios.get('../../../geoJSON/vsk_main_railways.geojson')
-    let mainRoads           = await axios.get('../../../geoJSON/vsk_main_roads.geojson')
-    let d1Landuse           = await axios.get('../../../geoJSON/vsk_D1_landuse.geojson')
-    let d1Construnctions    = await axios.get('../../../geoJSON/vsk_D1_construnctions.geojson')
-    let d1Railways          = await axios.get('../../../geoJSON/vsk_D1_railways.geojson')
-    let d1Roads             = await axios.get('../../../geoJSON/vsk_D1_roads.geojson')
-    let o61Landuse          = await axios.get('../../../geoJSON/vsk_61_landuse.geojson')
-    let o61Construnctions   = await axios.get('../../../geoJSON/vsk_61_construnctions.geojson')
-    let o61Roads            = await axios.get('../../../geoJSON/vsk_61_roads.geojson')
+    let mainLanduse         = await axios.get('../../../statics/geoJSON/vsk_main_landuse.geojson')
+    let mainConstrunctions  = await axios.get('../../../statics/geoJSON/vsk_main_construnctions.geojson')
+    let mainRailways        = await axios.get('../../../statics/geoJSON/vsk_main_railways.geojson')
+    let mainRoads           = await axios.get('../../../statics/geoJSON/vsk_main_roads.geojson')
+    let d1Landuse           = await axios.get('../../../statics/geoJSON/vsk_D1_landuse.geojson')
+    let d1Construnctions    = await axios.get('../../../statics/geoJSON/vsk_D1_construnctions.geojson')
+    let d1Railways          = await axios.get('../../../statics/geoJSON/vsk_D1_railways.geojson')
+    let d1Roads             = await axios.get('../../../statics/geoJSON/vsk_D1_roads.geojson')
+    let o61Landuse          = await axios.get('../../../statics/geoJSON/vsk_61_landuse.geojson')
+    let o61Construnctions   = await axios.get('../../../statics/geoJSON/vsk_61_construnctions.geojson')
+    let o61Roads            = await axios.get('../../../statics/geoJSON/vsk_61_roads.geojson')
     commit('setLoadingStatus', false)
     let response = {
       main: {
@@ -40,7 +40,7 @@ export async function actFetchMapVSKmodeDEV ({ commit }) {
     }
     commit('setMapVSK', response)
   } catch (e) {
-    console.error('Ошибка при загрузке карты ВСК', e)
+    console.error('[DEV] Ошибка при загрузке карты ВСК', e)
   }
 }
 
@@ -80,6 +80,6 @@ export async function actFetchMapVSKmodePROD ({ commit }) {
     }
     commit('setMapVSK', response)
   } catch (e) {
-    console.error('Ошибка при загрузке карты ВСК', e)
+    console.error('[PROD] Ошибка при загрузке карты ВСК', e)
   }
 }
