@@ -40,7 +40,7 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
-              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogConfirmDelete = true">
+              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogConfirmDeleteMarker = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
             </q-card-actions>
@@ -58,7 +58,7 @@
 
 		</l-map>
 
-    <q-dialog v-model="dyalogConfirmDelete" persistent>
+    <q-dialog v-model="dyalogConfirmDeleteMarker" persistent>
       <q-card>
         <q-card-section class="row items-center">
           <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
@@ -148,12 +148,7 @@ export default {
     LPopup,
   },
   data() {
-    return {
-      dyalogConfirmDelete: false,
-      clickedMarker: {},
-      point: {},
-      title: null,
-    }
+    return {}
   },
   computed: {
     options() {
@@ -174,9 +169,13 @@ export default {
       };
     },
     ...mapFields('SP', [
+      'loading',
       'dyalogNewMarker',
       'dyalogEditMarker',
-      'loading',
+      'dyalogConfirmDeleteMarker',
+      'clickedMarker',
+      'fields.point',
+      'fields.title',
     ]),
     ...mapState('mapVSK', [
       'mapInstance',
@@ -184,7 +183,6 @@ export default {
       'styles',
       'mapVSK',
       'markers',
-      'drawOptions',
     ]),
     ...mapGetters('mapVSK', [
       'getFeaturesVSKMainLanduse',
@@ -216,8 +214,8 @@ export default {
     onResetMarker () {
       this.title = null
     },
-    onSubmitEditMarker (clickedMarker) {
-      this.actUpdateItemToSP(clickedMarker)
+    onSubmitEditMarker (marker) {
+      this.actUpdateItemToSP(marker)
     },
     onResetEditMarker () {
     },
@@ -287,6 +285,10 @@ export default {
 
       if (type === 'polyline') {
         console.log(layer.getLatLngs())
+        this.actAddItemToSP({
+          title: this.title,
+          polyline: layer.getLatLngs(),
+        })
         // layer.bindPopup('A popup!')
       }
       // editableLayers.addLayer(layer);

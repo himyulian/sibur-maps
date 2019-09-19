@@ -14,6 +14,10 @@ export function setDyalogEditMarker (state, status) {
   state.dyalogEditMarker = status
 }
 
+export function setFields (state, data) {
+  state.fields = data
+}
+
 export function setItems (state, data) {
   state.items = data
 }

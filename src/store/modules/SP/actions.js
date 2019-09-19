@@ -19,20 +19,26 @@ export async function actAddItemToSP ({ commit, getters }, data) {
   commit('setLoadingStatus', true)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
-      Title: data.title,
-      CoordPoint: `${data.point.lat}, ${data.point.lng}`,
+      Title         : data.title,
+      CoordPoint    : data.point    ? JSON.stringify(data.point)    : '',
+      CoordPolyline : data.polyline ? JSON.stringify(data.polyline) : '',
     })
     let result = addResult.data
-    result.CoordPoint = result.CoordPoint.split(', ').map(v => Number(v))
+    result.CoordPoint = result.CoordPoint.split(',').map(v => Number(v))
     commit('setLoadingStatus', false)
     commit('setDyalogNewMarker', false)
     commit('setAddItem', result)
+    commit('setFields', {
+      point: null,
+      polyline: null,
+      title: null,
+    })
     console.log('addResult', result)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
       icon: 'fas fa-check-circle',
-      message: 'Маркер добавлен на карту'
+      message: 'Данные сохранены на сервере'
     })
   } catch (e) {
     commit('setLoadingStatus', false)
