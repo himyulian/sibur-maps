@@ -1,21 +1,22 @@
 import { sp } from '@pnp/sp'
 import { Notify } from 'quasar'
 
-export async function actFetchItemsFromSP ({ commit, getters }) {
+export async function actSPItemsFetch ({ commit, getters }) {
   try {
     let items = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getAll()
-    let result = items.map(value => {
-      value.CoordPoint = value.CoordPoint.split(', ').map(v => Number(v))
-      return value
+    items = items.map(item => {
+      item.CoordPoint    = item.CoordPoint    ? JSON.parse(item.CoordPoint)    : ''
+      item.CoordPolyline = item.CoordPolyline ? JSON.parse(item.CoordPolyline) : ''
+      return item
     })
-    commit('setItems', result)
-    console.log('items', result)
+    commit('setItems', items)
+    console.log('items', items)
   } catch (e) {
     console.error('Ошибка при загрузке записей из реестра', e)
   }
 }
 
-export async function actAddItemToSP ({ commit, getters }, data) {
+export async function actSPItemAdd ({ commit, getters }, data) {
   commit('setLoadingStatus', true)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
@@ -23,17 +24,18 @@ export async function actAddItemToSP ({ commit, getters }, data) {
       CoordPoint    : data.point    ? JSON.stringify(data.point)    : '',
       CoordPolyline : data.polyline ? JSON.stringify(data.polyline) : '',
     })
-    let result = addResult.data
-    result.CoordPoint = result.CoordPoint.split(',').map(v => Number(v))
+    let item = addResult.data
+    item.CoordPoint    = item.CoordPoint    ? JSON.parse(item.CoordPoint)    : ''
+    item.CoordPolyline = item.CoordPolyline ? JSON.parse(item.CoordPolyline) : ''
     commit('setLoadingStatus', false)
-    commit('setDyalogNewMarker', false)
-    commit('setAddItem', result)
+    commit('setDyalogMarkerNew', false)
+    commit('setItemAdd', item)
     commit('setFields', {
       point: null,
       polyline: null,
       title: null,
     })
-    console.log('addResult', result)
+    console.log('addResult', item)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
@@ -42,7 +44,7 @@ export async function actAddItemToSP ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogNewMarker', false)
+    // commit('setDyalogMarkerNew', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -53,15 +55,15 @@ export async function actAddItemToSP ({ commit, getters }, data) {
   }
 }
 
-export async function actUpdateItemToSP ({ commit, getters }, data) {
+export async function actSPItemUpdate ({ commit, getters }, data) {
   commit('setLoadingStatus', true)
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(data.Id).update({
       Title: data.Title,
     })
     commit('setLoadingStatus', false)
-    commit('setDyalogEditMarker', false)
-    commit('setUpdateItem', data)
+    commit('setDyalogMarkerEdit', false)
+    commit('setItemUpdate', data)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
@@ -70,7 +72,7 @@ export async function actUpdateItemToSP ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogEditMarker', false)
+    // commit('setDyalogMarkerEdit', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -81,12 +83,12 @@ export async function actUpdateItemToSP ({ commit, getters }, data) {
   }
 }
 
-export async function actDeleteItemFromSP ({ commit, getters }, id) {
+export async function actSPItemDelete ({ commit, getters }, id) {
   commit('setLoadingStatus', true)
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
-    commit('setDeleteItem', id)
+    commit('setItemDelete', id)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
@@ -95,7 +97,7 @@ export async function actDeleteItemFromSP ({ commit, getters }, id) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogNewMarker', false)
+    // commit('setDyalogMarkerNew', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',

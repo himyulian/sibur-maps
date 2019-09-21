@@ -39,8 +39,8 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogEditMarker = true" />
-              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogConfirmDeleteMarker = true">
+              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogMarkerEdit = true" />
+              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogMarkerConfirmDelete = true">
                 <q-tooltip>Удалить маркер</q-tooltip>
               </q-btn>
             </q-card-actions>
@@ -58,7 +58,7 @@
 
 		</l-map>
 
-    <q-dialog v-model="dyalogConfirmDeleteMarker" persistent>
+    <q-dialog v-model="dyalogMarkerConfirmDelete" persistent>
       <q-card>
         <q-card-section class="row items-center">
           <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
@@ -71,7 +71,7 @@
       </q-card>
     </q-dialog>
 
-		<q-dialog v-model="dyalogNewMarker" persistent>
+		<q-dialog v-model="dyalogMarkerNew" persistent>
 			<q-card style="min-width: 400px" class="q-pa-md">
 				<q-form @submit.prevent.stop="onSubmitMarker" @reset="onResetMarker" class="q-gutter-md">
 					<q-card-section>
@@ -95,7 +95,7 @@
 			</q-card>
 		</q-dialog>
 
-		<q-dialog v-model="dyalogEditMarker" persistent>
+		<q-dialog v-model="dyalogMarkerEdit" persistent>
 			<q-card style="min-width: 400px" class="q-pa-md">
 				<q-form @submit.prevent.stop="onSubmitEditMarker(clickedMarker)" @reset="onResetEditMarker" class="q-gutter-md">
 					<q-card-section>
@@ -170,12 +170,13 @@ export default {
     },
     ...mapFields('SP', [
       'loading',
-      'dyalogNewMarker',
-      'dyalogEditMarker',
-      'dyalogConfirmDeleteMarker',
+      'dyalogMarkerNew',
+      'dyalogMarkerEdit',
+      'dyalogMarkerConfirmDelete',
       'clickedMarker',
-      'fields.point',
       'fields.title',
+      'fields.point',
+      'fields.polyline',
     ]),
     ...mapState('mapVSK', [
       'mapInstance',
@@ -203,10 +204,10 @@ export default {
   },
   methods: {
     deleteMarker(item) {
-      this.actDeleteItemFromSP(item.Id)
+      this.actSPItemDelete(item.Id)
     },
     onSubmitMarker () {
-      this.actAddItemToSP({
+      this.actSPItemAdd({
         title: this.title,
         point: this.point,
       })
@@ -215,7 +216,7 @@ export default {
       this.title = null
     },
     onSubmitEditMarker (marker) {
-      this.actUpdateItemToSP(marker)
+      this.actSPItemUpdate(marker)
     },
     onResetEditMarker () {
     },
@@ -235,7 +236,7 @@ export default {
       'setBounds',
     ]),
     ...mapMutations('SP', [
-      'setDyalogNewMarker',
+      'setDyalogMarkerNew',
     ]),
     ...mapActions('mapVSK', [
       'actSetCenter',
@@ -243,10 +244,10 @@ export default {
       'actFetchMapVSKmodePROD',
     ]),
     ...mapActions('SP', [
-      'actFetchItemsFromSP',
-      'actAddItemToSP',
-      'actUpdateItemToSP',
-      'actDeleteItemFromSP',
+      'actSPItemsFetch',
+      'actSPItemAdd',
+      'actSPItemUpdate',
+      'actSPItemDelete',
     ])
   },
   watch: {  },
@@ -255,7 +256,7 @@ export default {
       this.actFetchMapVSKmodeDEV()
     } else if (process.env.PROD) {
       this.actFetchMapVSKmodePROD()
-      this.actFetchItemsFromSP()
+      this.actSPItemsFetch()
     }
   },
   mounted() {
@@ -278,14 +279,13 @@ export default {
             layer = e.layer
 
       if (type === 'marker') {
-        this.dyalogNewMarker = true
+        this.dyalogMarkerNew = true
         this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
       }
 
       if (type === 'polyline') {
-        console.log(layer.getLatLngs())
-        this.actAddItemToSP({
+        this.actSPItemAdd({
           title: this.title,
           polyline: layer.getLatLngs(),
         })

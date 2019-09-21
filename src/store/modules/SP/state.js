@@ -1,8 +1,8 @@
 export default {
   loading: false,
-  dyalogNewMarker: false,
-  dyalogEditMarker: false,
-  dyalogConfirmDeleteMarker: false,
+  dyalogMarkerNew: false,
+  dyalogMarkerEdit: false,
+  dyalogMarkerConfirmDelete: false,
 
   // *
   items: [],
