@@ -30,23 +30,8 @@
 			<l-geo-json :geojson="getFeaturesVSK61Roads" :optionsStyle="styles.roads"></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSK61Construnctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
 
-			<l-marker v-for="(marker, idx) in getMarkers" :key="idx" :lat-lng="marker.CoordPoint">
-        <l-popup>
-          <q-card flat class="my-card">
-            <q-card-section>
-              <div class="text-h6">{{marker.Title}}</div>
-              <div class="text-subtitle1">ID: {{marker.Id}}</div>
-            </q-card-section>
-            <q-separator />
-            <q-card-actions align="right">
-              <q-btn rounded :loading="loading" color="primary" class="q-mt-sm" size="sm" label="Редактировать" @click="clickedMarker = marker; dyalogMarkerEdit = true" />
-              <q-btn round :loading="loading" color="primary" class="q-mt-sm" size="sm" icon="delete_forever" @click="clickedMarker = marker; dyalogMarkerConfirmDelete = true">
-                <q-tooltip>Удалить маркер</q-tooltip>
-              </q-btn>
-            </q-card-actions>
-          </q-card>
-        </l-popup>
-      </l-marker>
+      <s-marker :markers="markers"></s-marker>
+      <s-marker :markers="getMarkers"></s-marker>
 
       <l-control position="topright" >
         <div class="column q-gutter-xs">
@@ -58,66 +43,9 @@
 
 		</l-map>
 
-    <q-dialog v-model="dyalogMarkerConfirmDelete" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
-          <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Отмена" color="primary" v-close-popup @click="clickedMarker = {}" />
-          <q-btn flat label="Удалить маркер" color="primary" v-close-popup @click="deleteMarker(clickedMarker)" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-		<q-dialog v-model="dyalogMarkerNew" persistent>
-			<q-card style="min-width: 400px" class="q-pa-md">
-				<q-form @submit.prevent.stop="onSubmitMarker" @reset="onResetMarker" class="q-gutter-md">
-					<q-card-section>
-						<div class="text-h6">Введите данные</div>
-					</q-card-section>
-					<q-card-section>
-						<q-input
-							dense
-							filled
-							autogrow
-							v-model="title"
-							label="Название"
-							:rules="[val => !!val || 'Поле обязательно для заполнения']"
-						/>
-					</q-card-section>
-					<q-card-section align="right">
-						<q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset" />
-						<q-btn :loading="loading" color="primary" label="Сохранить" type="submit" />
-					</q-card-section>
-				</q-form>
-			</q-card>
-		</q-dialog>
-
-		<q-dialog v-model="dyalogMarkerEdit" persistent>
-			<q-card style="min-width: 400px" class="q-pa-md">
-				<q-form @submit.prevent.stop="onSubmitEditMarker(clickedMarker)" @reset="onResetEditMarker" class="q-gutter-md">
-					<q-card-section>
-						<div class="text-h6">Измените необходимые данные</div>
-					</q-card-section>
-					<q-card-section>
-						<q-input
-							dense
-							filled
-							autogrow
-							v-model="clickedMarker.Title"
-							label="Название"
-							:rules="[val => !!val || 'Поле обязательно для заполнения']"
-						/>
-					</q-card-section>
-					<q-card-section align="right">
-						<q-btn :disable="loading" flat label="Отмена" v-close-popup type="reset" />
-						<q-btn :loading="loading" color="primary" label="Сохранить" type="submit" />
-					</q-card-section>
-				</q-form>
-			</q-card>
-		</q-dialog>
+    <dyalog-marker-add/>
+    <dyalog-marker-edit/>
+    <dyalog-marker-delete/>
 
 	</q-page>
 </template>
@@ -135,11 +63,18 @@ import L from 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw'
 import { drawControlOptions, drawLocalOptions } from '../boot/leaflet-boot'
 
-import PopupContent from "../components/GeoJson2Popup"
+import SMarker from "../components/SMarker"
+import DyalogMarkerAdd from "../components/DyalogMarkerAdd"
+import DyalogMarkerEdit from "../components/DyalogMarkerEdit"
+import DyalogMarkerDelete from "../components/DyalogMarkerDelete"
 
 export default {
   name: 'PageMapVSK',
   components: {
+    SMarker,
+    DyalogMarkerAdd,
+    DyalogMarkerEdit,
+    DyalogMarkerDelete,
     LMap,
     LTileLayer,
     LMarker,
@@ -170,7 +105,7 @@ export default {
     },
     ...mapFields('SP', [
       'loading',
-      'dyalogMarkerNew',
+      'dyalogMarkerAdd',
       'dyalogMarkerEdit',
       'dyalogMarkerConfirmDelete',
       'clickedMarker',
@@ -203,24 +138,6 @@ export default {
     ])
   },
   methods: {
-    deleteMarker(item) {
-      this.actSPItemDelete(item.Id)
-    },
-    onSubmitMarker () {
-      this.actSPItemAdd({
-        title: this.title,
-        point: this.point,
-      })
-    },
-    onResetMarker () {
-      this.title = null
-    },
-    onSubmitEditMarker (marker) {
-      this.actSPItemUpdate(marker)
-    },
-    onResetEditMarker () {
-    },
-
     zoomUpdated (zoom) {
       this.setZoom(zoom)
     },
@@ -236,7 +153,7 @@ export default {
       'setBounds',
     ]),
     ...mapMutations('SP', [
-      'setDyalogMarkerNew',
+      'setDyalogMarkerAdd',
     ]),
     ...mapActions('mapVSK', [
       'actSetCenter',
@@ -245,9 +162,6 @@ export default {
     ]),
     ...mapActions('SP', [
       'actSPItemsFetch',
-      'actSPItemAdd',
-      'actSPItemUpdate',
-      'actSPItemDelete',
     ])
   },
   watch: {  },
@@ -279,16 +193,16 @@ export default {
             layer = e.layer
 
       if (type === 'marker') {
-        this.dyalogMarkerNew = true
+        this.dyalogMarkerAdd = true
         this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
       }
 
       if (type === 'polyline') {
-        this.actSPItemAdd({
-          title: this.title,
-          polyline: layer.getLatLngs(),
-        })
+        // this.actSPItemAdd({
+        //   title: this.title,
+        //   polyline: layer.getLatLngs(),
+        // })
         // layer.bindPopup('A popup!')
       }
       // editableLayers.addLayer(layer);
@@ -301,8 +215,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .my-card
-    width 100%
-    max-width 350px
-    min-width 250px
 </style>

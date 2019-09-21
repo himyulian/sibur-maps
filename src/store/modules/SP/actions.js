@@ -28,7 +28,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     item.CoordPoint    = item.CoordPoint    ? JSON.parse(item.CoordPoint)    : ''
     item.CoordPolyline = item.CoordPolyline ? JSON.parse(item.CoordPolyline) : ''
     commit('setLoadingStatus', false)
-    commit('setDyalogMarkerNew', false)
+    commit('setDyalogMarkerAdd', false)
     commit('setItemAdd', item)
     commit('setFields', {
       point: null,
@@ -44,7 +44,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogMarkerNew', false)
+    // commit('setDyalogMarkerAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -88,6 +88,7 @@ export async function actSPItemDelete ({ commit, getters }, id) {
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
+    commit('setClickedMarker', {})
     commit('setItemDelete', id)
     Notify.create({
       color: 'green-4',
@@ -97,7 +98,7 @@ export async function actSPItemDelete ({ commit, getters }, id) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogMarkerNew', false)
+    // commit('setDyalogMarkerAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',

@@ -1,12 +1,14 @@
 export default {
   loading: false,
-  dyalogMarkerNew: false,
+  dyalogMarkerAdd: false,
   dyalogMarkerEdit: false,
   dyalogMarkerConfirmDelete: false,
 
   // *
   items: [],
-  clickedMarker: {},
+  clickedMarker: {
+    Title: null,
+  },
   fields: {
     point: null,
     polyline: null,

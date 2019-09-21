@@ -6,8 +6,12 @@ export function setLoadingStatus (state, status) {
   state.loading = status
 }
 
-export function setDyalogMarkerNew (state, status) {
-  state.dyalogMarkerNew = status
+export function setClickedMarker (state, marker) {
+  state.clickedMarker = marker
+}
+
+export function setDyalogMarkerAdd (state, status) {
+  state.dyalogMarkerAdd = status
 }
 
 export function setDyalogMarkerEdit (state, status) {
