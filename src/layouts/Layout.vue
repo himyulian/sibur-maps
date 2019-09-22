@@ -38,7 +38,7 @@
 					active-class="my-menu-link"
 				>
 					<q-item-section avatar>
-						<q-icon name="fas fa-home" />
+						<q-icon name="fas fa-map" />
 					</q-item-section>
 
 					<q-item-section>Воронежсинтезкаучук</q-item-section>
