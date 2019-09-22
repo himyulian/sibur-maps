@@ -104,12 +104,7 @@ export default {
       };
     },
     ...mapFields('SP', [
-      'loading',
       'dyalogMarkerAdd',
-      'dyalogMarkerEdit',
-      'dyalogMarkerConfirmDelete',
-      'clickedMarker',
-      'fields.title',
       'fields.point',
       'fields.polyline',
     ]),
@@ -151,9 +146,6 @@ export default {
       'setZoom',
       'setCenter',
       'setBounds',
-    ]),
-    ...mapMutations('SP', [
-      'setDyalogMarkerAdd',
     ]),
     ...mapActions('mapVSK', [
       'actSetCenter',

@@ -8,15 +8,16 @@
       <q-card-actions align="right">
         <q-btn
           label="Отмена"
+          :disable="loading"
           color="primary"
           flat
           v-close-popup
         />
         <q-btn
           label="Удалить маркер"
+          :loading="loading"
           color="primary"
           flat
-          v-close-popup
           @click="deleteMarker(clickedMarker)"
         />
       </q-card-actions>
@@ -36,6 +37,7 @@ export default {
   },
   computed: {
     ...mapFields('SP', [
+      'loading',
       'dyalogMarkerConfirmDelete',
       'clickedMarker',
     ]),

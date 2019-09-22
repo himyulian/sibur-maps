@@ -30,11 +30,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     commit('setLoadingStatus', false)
     commit('setDyalogMarkerAdd', false)
     commit('setItemAdd', item)
-    commit('setFields', {
-      point: null,
-      polyline: null,
-      title: null,
-    })
+    commit('setClearFields')
     console.log('addResult', item)
     Notify.create({
       color: 'green-4',
@@ -88,7 +84,7 @@ export async function actSPItemDelete ({ commit, getters }, id) {
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
-    commit('setClickedMarker', {})
+    commit('setClearClickedMarker')
     commit('setItemDelete', id)
     Notify.create({
       color: 'green-4',

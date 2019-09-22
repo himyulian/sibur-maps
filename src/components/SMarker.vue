@@ -11,7 +11,7 @@
           <q-card-actions align="right">
             <q-btn
               label="Редактировать"
-              :loading="loading"
+              :disable="loading"
               color="primary"
               class="q-mt-sm"
               size="sm"
@@ -19,7 +19,7 @@
               @click="clickedMarker = marker; dyalogMarkerEdit = true"
             />
             <q-btn
-              :loading="loading"
+              :disable="loading"
               icon="delete_forever"
               color="primary"
               class="q-mt-sm"
