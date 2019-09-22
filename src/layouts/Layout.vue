@@ -41,10 +41,10 @@
 						<q-icon name="fas fa-home" />
 					</q-item-section>
 
-					<q-item-section>Главная</q-item-section>
+					<q-item-section>Воронежсинтезкаучук</q-item-section>
 				</q-item>
 
-				<q-item
+<!-- 				<q-item
 					to="/MapVSK"
 					exact
 					clickable
@@ -58,7 +58,8 @@
 					</q-item-section>
 
 					<q-item-section>Воронежсинтезкаучук</q-item-section>
-				</q-item>
+				</q-item> -->
+
 			</q-list>
 		</q-drawer>
 
