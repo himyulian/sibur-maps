@@ -194,9 +194,11 @@ export default {
       }
 
       if (type === 'polyline') {
-        this.dyalogItemAdd = true
-        this.polyline = layer.getLatLngs()
-        // layer.bindPopup('A popup!')
+        if (layer.getLatLngs().length >= 2) {
+          this.dyalogItemAdd = true
+          this.polyline = layer.getLatLngs()
+          // layer.bindPopup('A popup!')
+        }
       }
       // editableLayers.addLayer(layer);
     }
