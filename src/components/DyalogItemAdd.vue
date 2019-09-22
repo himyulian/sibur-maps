@@ -56,6 +56,7 @@ export default {
       'clickedItem',
       'fields.title',
       'fields.point',
+      'fields.polyline',
     ]),
   },
   methods: {
@@ -63,13 +64,15 @@ export default {
       this.actSPItemAdd({
         title: this.title,
         point: this.point,
+        polyline: this.polyline,
       })
     },
     onReset () {
-      this.title = null
+      this.actClearFields()
     },
     ...mapActions('SP', [
       'actSPItemAdd',
+      'actClearFields',
     ])
   },
 }

@@ -10,8 +10,8 @@ export default {
     Title: null,
   },
   fields: {
+    title: null,
     point: null,
     polyline: null,
-    title: null,
   },
 }

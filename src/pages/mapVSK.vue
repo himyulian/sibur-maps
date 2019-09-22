@@ -30,8 +30,8 @@
 			<l-geo-json :geojson="getFeaturesVSK61Roads" :optionsStyle="styles.roads"></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSK61Construnctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
 
-      <s-marker :items="markers"></s-marker>
       <s-marker :items="getMarkers"></s-marker>
+      <s-polyline :items="getPolylines"></s-polyline>
 
       <l-control position="topright" >
         <div class="column q-gutter-xs">
@@ -64,6 +64,7 @@ import 'leaflet-draw/dist/leaflet.draw'
 import { drawControlOptions, drawLocalOptions } from '../boot/leaflet-boot'
 
 import SMarker from "../components/SMarker"
+import SPolyline from "../components/SPolyline"
 import DyalogItemAdd from "../components/DyalogItemAdd"
 import DyalogItemEdit from "../components/DyalogItemEdit"
 import DyalogItemDelete from "../components/DyalogItemDelete"
@@ -72,6 +73,7 @@ export default {
   name: 'PageMapVSK',
   components: {
     SMarker,
+    SPolyline,
     DyalogItemAdd,
     DyalogItemEdit,
     DyalogItemDelete,
@@ -130,6 +132,7 @@ export default {
     ]),
     ...mapGetters('SP', [
       'getMarkers',
+      'getPolylines',
     ])
   },
   methods: {
@@ -191,10 +194,8 @@ export default {
       }
 
       if (type === 'polyline') {
-        // this.actSPItemAdd({
-        //   title: this.title,
-        //   polyline: layer.getLatLngs(),
-        // })
+        this.dyalogItemAdd = true
+        this.polyline = layer.getLatLngs()
         // layer.bindPopup('A popup!')
       }
       // editableLayers.addLayer(layer);

@@ -18,7 +18,7 @@
           :loading="loading"
           color="primary"
           flat
-          @click="deleteMarker(clickedItem)"
+          @click="deleteItem(clickedItem)"
         />
       </q-card-actions>
     </q-card>
@@ -43,7 +43,7 @@ export default {
     ]),
   },
   methods: {
-    deleteMarker(item) {
+    deleteItem(item) {
       this.actSPItemDelete(item.Id)
     },
     ...mapActions('SP', [

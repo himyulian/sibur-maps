@@ -1,7 +1,7 @@
 import { sp } from '@pnp/sp'
 import { Notify } from 'quasar'
 
-export async function actSPItemsFetch ({ commit, getters }) {
+export async function actSPItemsFetch ({ commit }) {
   try {
     let items = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getAll()
     items = items.map(item => {
@@ -16,7 +16,7 @@ export async function actSPItemsFetch ({ commit, getters }) {
   }
 }
 
-export async function actSPItemAdd ({ commit, getters }, data) {
+export async function actSPItemAdd ({ commit }, data) {
   commit('setLoadingStatus', true)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
@@ -40,7 +40,6 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogItemAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -51,7 +50,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
   }
 }
 
-export async function actSPItemUpdate ({ commit, getters }, data) {
+export async function actSPItemUpdate ({ commit }, data) {
   commit('setLoadingStatus', true)
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(data.Id).update({
@@ -68,7 +67,6 @@ export async function actSPItemUpdate ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogItemEdit', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -79,7 +77,7 @@ export async function actSPItemUpdate ({ commit, getters }, data) {
   }
 }
 
-export async function actSPItemDelete ({ commit, getters }, id) {
+export async function actSPItemDelete ({ commit }, id) {
   commit('setLoadingStatus', true)
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
@@ -94,7 +92,6 @@ export async function actSPItemDelete ({ commit, getters }, id) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogItemAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -102,4 +99,8 @@ export async function actSPItemDelete ({ commit, getters }, id) {
       message: 'Ошибка при удалении'
     })
   }
+}
+
+export function actClearFields ({ commit }) {
+  commit('setClearFields')
 }
