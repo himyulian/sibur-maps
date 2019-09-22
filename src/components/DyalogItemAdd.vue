@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="dyalogMarkerAdd" persistent>
+  <q-dialog v-model="dyalogItemAdd" persistent>
     <q-card style="min-width: 400px" class="q-pa-md">
       <q-form
         class="q-gutter-md"
@@ -44,7 +44,7 @@ import { mapFields } from 'vuex-map-fields'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  name: 'DyalogMarkerAdd',
+  name: 'DyalogItemAdd',
   props: [],
   data () {
     return {}
@@ -52,8 +52,8 @@ export default {
   computed: {
     ...mapFields('SP', [
       'loading',
-      'dyalogMarkerAdd',
-      'clickedMarker',
+      'dyalogItemAdd',
+      'clickedItem',
       'fields.title',
       'fields.point',
     ]),

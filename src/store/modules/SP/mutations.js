@@ -6,12 +6,12 @@ export function setLoadingStatus (state, status) {
   state.loading = status
 }
 
-export function setDyalogMarkerAdd (state, status) {
-  state.dyalogMarkerAdd = status
+export function setDyalogItemAdd (state, status) {
+  state.dyalogItemAdd = status
 }
 
-export function setDyalogMarkerEdit (state, status) {
-  state.dyalogMarkerEdit = status
+export function setDyalogItemEdit (state, status) {
+  state.dyalogItemEdit = status
 }
 
 export function setClearFields (state) {
@@ -20,9 +20,9 @@ export function setClearFields (state) {
   }
 }
 
-export function setClearClickedMarker (state) {
-  for (let key of Object.keys(state.clickedMarker)) {
-    state.clickedMarker[key] = null
+export function setClearClickedItem (state) {
+  for (let key of Object.keys(state.clickedItem)) {
+    state.clickedItem[key] = null
   }
 }
 

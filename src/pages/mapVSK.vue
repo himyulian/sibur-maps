@@ -30,8 +30,8 @@
 			<l-geo-json :geojson="getFeaturesVSK61Roads" :optionsStyle="styles.roads"></l-geo-json>
 			<l-geo-json :geojson="getFeaturesVSK61Construnctions" :optionsStyle="styles.construnctions" :options="options"></l-geo-json>
 
-      <s-marker :markers="markers"></s-marker>
-      <s-marker :markers="getMarkers"></s-marker>
+      <s-marker :items="markers"></s-marker>
+      <s-marker :items="getMarkers"></s-marker>
 
       <l-control position="topright" >
         <div class="column q-gutter-xs">
@@ -43,9 +43,9 @@
 
 		</l-map>
 
-    <dyalog-marker-add/>
-    <dyalog-marker-edit/>
-    <dyalog-marker-delete/>
+    <dyalog-item-add/>
+    <dyalog-item-edit/>
+    <dyalog-item-delete/>
 
 	</q-page>
 </template>
@@ -64,17 +64,17 @@ import 'leaflet-draw/dist/leaflet.draw'
 import { drawControlOptions, drawLocalOptions } from '../boot/leaflet-boot'
 
 import SMarker from "../components/SMarker"
-import DyalogMarkerAdd from "../components/DyalogMarkerAdd"
-import DyalogMarkerEdit from "../components/DyalogMarkerEdit"
-import DyalogMarkerDelete from "../components/DyalogMarkerDelete"
+import DyalogItemAdd from "../components/DyalogItemAdd"
+import DyalogItemEdit from "../components/DyalogItemEdit"
+import DyalogItemDelete from "../components/DyalogItemDelete"
 
 export default {
   name: 'PageMapVSK',
   components: {
     SMarker,
-    DyalogMarkerAdd,
-    DyalogMarkerEdit,
-    DyalogMarkerDelete,
+    DyalogItemAdd,
+    DyalogItemEdit,
+    DyalogItemDelete,
     LMap,
     LTileLayer,
     LMarker,
@@ -104,7 +104,7 @@ export default {
       };
     },
     ...mapFields('SP', [
-      'dyalogMarkerAdd',
+      'dyalogItemAdd',
       'fields.point',
       'fields.polyline',
     ]),
@@ -185,7 +185,7 @@ export default {
             layer = e.layer
 
       if (type === 'marker') {
-        this.dyalogMarkerAdd = true
+        this.dyalogItemAdd = true
         this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
       }

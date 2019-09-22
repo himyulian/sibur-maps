@@ -1,12 +1,12 @@
 export default {
   loading: false,
-  dyalogMarkerAdd: false,
-  dyalogMarkerEdit: false,
-  dyalogMarkerConfirmDelete: false,
+  dyalogItemAdd: false,
+  dyalogItemEdit: false,
+  dyalogItemConfirmDelete: false,
 
   // *
   items: [],
-  clickedMarker: {
+  clickedItem: {
     Title: null,
   },
   fields: {

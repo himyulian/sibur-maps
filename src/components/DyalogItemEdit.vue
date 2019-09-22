@@ -1,9 +1,9 @@
 <template>
-  <q-dialog v-model="dyalogMarkerEdit" persistent>
+  <q-dialog v-model="dyalogItemEdit" persistent>
     <q-card style="min-width: 400px" class="q-pa-md">
       <q-form
         class="q-gutter-md"
-        @submit.prevent.stop="onSubmit(clickedMarker)"
+        @submit.prevent.stop="onSubmit(clickedItem)"
         @reset="onReset"
       >
         <q-card-section>
@@ -44,7 +44,7 @@ import { mapFields } from 'vuex-map-fields'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  name: 'DyalogMarkerEdit',
+  name: 'DyalogItemEdit',
   props: [],
   data () {
     return {}
@@ -52,9 +52,9 @@ export default {
   computed: {
     ...mapFields('SP', [
       'loading',
-      'dyalogMarkerEdit',
-      'clickedMarker',
-      'clickedMarker.Title',
+      'dyalogItemEdit',
+      'clickedItem',
+      'clickedItem.Title',
       'fields.title',
     ]),
   },

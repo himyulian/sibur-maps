@@ -28,7 +28,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     item.CoordPoint    = item.CoordPoint    ? JSON.parse(item.CoordPoint)    : ''
     item.CoordPolyline = item.CoordPolyline ? JSON.parse(item.CoordPolyline) : ''
     commit('setLoadingStatus', false)
-    commit('setDyalogMarkerAdd', false)
+    commit('setDyalogItemAdd', false)
     commit('setItemAdd', item)
     commit('setClearFields')
     console.log('addResult', item)
@@ -40,7 +40,7 @@ export async function actSPItemAdd ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogMarkerAdd', false)
+    // commit('setDyalogItemAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -58,7 +58,7 @@ export async function actSPItemUpdate ({ commit, getters }, data) {
       Title: data.Title,
     })
     commit('setLoadingStatus', false)
-    commit('setDyalogMarkerEdit', false)
+    commit('setDyalogItemEdit', false)
     commit('setItemUpdate', data)
     Notify.create({
       color: 'green-4',
@@ -68,7 +68,7 @@ export async function actSPItemUpdate ({ commit, getters }, data) {
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogMarkerEdit', false)
+    // commit('setDyalogItemEdit', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -84,23 +84,22 @@ export async function actSPItemDelete ({ commit, getters }, id) {
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
-    commit('setClearClickedMarker')
+    commit('setClearClickedItem')
     commit('setItemDelete', id)
     Notify.create({
       color: 'green-4',
       textColor: 'white',
       icon: 'fas fa-check-circle',
-      message: 'Маркер удален'
+      message: 'Элемент удален'
     })
   } catch (e) {
     commit('setLoadingStatus', false)
-    // commit('setDyalogMarkerAdd', false)
+    // commit('setDyalogItemAdd', false)
     Notify.create({
       color: 'red-4',
       textColor: 'white',
       icon: 'fas fa-exclamation-circle',
-      message: 'Ошибка при удалении маркера'
+      message: 'Ошибка при удалении'
     })
-
   }
 }

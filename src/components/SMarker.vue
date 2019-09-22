@@ -1,11 +1,11 @@
 <template>
   <div>
-    <l-marker v-for="(marker, idx) in markers" :key="idx" :lat-lng="marker.CoordPoint">
+    <l-marker v-for="(item, idx) in items" :key="idx" :lat-lng="item.CoordPoint">
       <l-popup>
         <q-card flat class="my-card">
           <q-card-section>
-            <div class="text-h6">{{marker.Title}}</div>
-            <div class="text-subtitle1">ID: {{marker.Id}}</div>
+            <div class="text-h6">{{item.Title}}</div>
+            <div class="text-subtitle1">ID: {{item.Id}}</div>
           </q-card-section>
           <q-separator />
           <q-card-actions align="right">
@@ -16,7 +16,7 @@
               class="q-mt-sm"
               size="sm"
               rounded
-              @click="clickedMarker = marker; dyalogMarkerEdit = true"
+              @click="clickedItem = item; dyalogItemEdit = true"
             />
             <q-btn
               :disable="loading"
@@ -25,9 +25,9 @@
               class="q-mt-sm"
               size="sm"
               round
-              @click="clickedMarker = marker; dyalogMarkerConfirmDelete = true"
+              @click="clickedItem = item; dyalogItemConfirmDelete = true"
             >
-              <q-tooltip>Удалить маркер</q-tooltip>
+              <q-tooltip>Удалить</q-tooltip>
             </q-btn>
           </q-card-actions>
         </q-card>
@@ -48,7 +48,7 @@ export default {
     LPopup,
   },
   props: {
-    markers: {
+    items: {
       type: Array,
       default: []
     },
@@ -59,9 +59,9 @@ export default {
   computed: {
     ...mapFields('SP', [
       'loading',
-      'dyalogMarkerEdit',
-      'dyalogMarkerConfirmDelete',
-      'clickedMarker',
+      'dyalogItemEdit',
+      'dyalogItemConfirmDelete',
+      'clickedItem',
     ]),
   },
 }

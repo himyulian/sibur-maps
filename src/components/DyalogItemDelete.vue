@@ -1,9 +1,9 @@
 <template>
-  <q-dialog v-model="dyalogMarkerConfirmDelete" persistent>
+  <q-dialog v-model="dyalogItemConfirmDelete" persistent>
     <q-card>
       <q-card-section class="row items-center">
         <q-icon name="warning" class="text-red" style="font-size: 3rem;" />
-        <span class="q-ml-sm">Подтвердите удаление маркера с карты</span>
+        <span class="q-ml-sm">Подтвердите удаление элемента с карты</span>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn
@@ -14,11 +14,11 @@
           v-close-popup
         />
         <q-btn
-          label="Удалить маркер"
+          label="Удалить"
           :loading="loading"
           color="primary"
           flat
-          @click="deleteMarker(clickedMarker)"
+          @click="deleteMarker(clickedItem)"
         />
       </q-card-actions>
     </q-card>
@@ -30,7 +30,7 @@ import { mapFields } from 'vuex-map-fields'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
-  name: 'DyalogMarkerDelete',
+  name: 'DyalogItemDelete',
   props: [],
   data () {
     return {}
@@ -38,8 +38,8 @@ export default {
   computed: {
     ...mapFields('SP', [
       'loading',
-      'dyalogMarkerConfirmDelete',
-      'clickedMarker',
+      'dyalogItemConfirmDelete',
+      'clickedItem',
     ]),
   },
   methods: {
