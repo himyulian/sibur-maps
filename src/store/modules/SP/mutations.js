@@ -14,6 +14,10 @@ export function setDyalogItemEdit (state, status) {
   state.dyalogItemEdit = status
 }
 
+export function setDyalogItemDelete (state, status) {
+  state.dyalogItemConfirmDelete = status
+}
+
 export function setClearFields (state) {
   for (let key of Object.keys(state.fields)) {
     state.fields[key] = null

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <l-marker v-for="(item, idx) in items" :key="idx" :lat-lng="item.CoordPoint">
+    <l-marker
+      v-for="(item, idx) in items"
+      :key="idx"
+      :lat-lng="item.CoordPoint"
+    >
       <l-popup>
         <q-card flat class="my-card">
           <q-card-section>

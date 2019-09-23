@@ -32,6 +32,7 @@
 
       <s-marker :items="getMarkers"></s-marker>
       <s-polyline :items="getPolylines"></s-polyline>
+      <s-polyline :items="examplePolylines"></s-polyline>
 
       <l-control position="topright" >
         <div class="column q-gutter-xs">
@@ -115,7 +116,8 @@ export default {
       'tile',
       'styles',
       'mapVSK',
-      'markers',
+      'exampleMarkers',
+      'examplePolylines',
     ]),
     ...mapGetters('mapVSK', [
       'getFeaturesVSKMainLanduse',

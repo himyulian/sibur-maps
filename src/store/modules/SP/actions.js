@@ -17,6 +17,8 @@ export async function actSPItemsFetch ({ commit }) {
 }
 
 export async function actSPItemAdd ({ commit }, data) {
+console.log("TCL: actSPItemAdd -> data", data)
+
   commit('setLoadingStatus', true)
   try {
     let addResult = await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.add({
@@ -36,7 +38,7 @@ export async function actSPItemAdd ({ commit }, data) {
       color: 'green-4',
       textColor: 'white',
       icon: 'fas fa-check-circle',
-      message: 'Данные сохранены на сервере'
+      message: 'Данные сохранены'
     })
   } catch (e) {
     commit('setLoadingStatus', false)
@@ -44,7 +46,7 @@ export async function actSPItemAdd ({ commit }, data) {
       color: 'red-4',
       textColor: 'white',
       icon: 'fas fa-exclamation-circle',
-      message: 'Ошибка при сохранении данных'
+      message: 'Ошибка при сохранении'
     })
 
   }
@@ -71,7 +73,7 @@ export async function actSPItemUpdate ({ commit }, data) {
       color: 'red-4',
       textColor: 'white',
       icon: 'fas fa-exclamation-circle',
-      message: 'Ошибка при сохранении данных'
+      message: 'Ошибка при сохранении'
     })
 
   }
@@ -82,6 +84,7 @@ export async function actSPItemDelete ({ commit }, id) {
   try {
     await sp.web.getList('/orgunits/vsk/map/Lists/Reestr').items.getById(id).delete()
     commit('setLoadingStatus', false)
+    commit('setDyalogItemDelete', false)
     commit('setClearClickedItem')
     commit('setItemDelete', id)
     Notify.create({

@@ -1,6 +1,13 @@
 <template>
   <div>
-    <l-polyline v-for="(item, idx) in items" :key="idx" :lat-lngs="item.CoordPolyline">
+    <l-polyline
+      v-for="(item, idx) in items"
+      :key="idx"
+      :lat-lngs="item.CoordPolyline"
+      :pane="'markerPane'"
+      :color="'red'"
+      :weight="7"
+    >
       <l-popup>
         <q-card flat class="my-card">
           <q-card-section>
