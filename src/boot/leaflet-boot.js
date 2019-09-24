@@ -22,13 +22,13 @@ export const drawControlOptions = {
   position: 'topleft',
   draw: {
     marker: {
-        // icon: new MyCustomMarker()
+      // icon: new MyCustomMarker()
     },
     polyline: {
-        shapeOptions: {
-            color: '#00FFFF',
-            weight: 10
-        }
+      shapeOptions: {
+        color: '#FF0000',
+        weight: 10
+      }
     },
     polygon: false /* {
         allowIntersection: false, // Restricts shapes to simple polygons
@@ -109,7 +109,7 @@ export const drawLocalOptions = {
         tooltip: {
           start: 'Выберите точку начала линии.',
           cont: 'Выберите следующую точку.',
-          end: 'Кликните на последней точке для завершения.'
+          end: 'Нажмите "Закончить" для завершения.'
         }
       },
       rectangle: {

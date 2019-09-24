@@ -32,7 +32,6 @@
 
       <s-marker :items="getMarkers"></s-marker>
       <s-polyline :items="getPolylines"></s-polyline>
-      <s-polyline :items="examplePolylines"></s-polyline>
 
       <l-control position="topright" >
         <div class="column q-gutter-xs">
@@ -190,6 +189,7 @@ export default {
             layer = e.layer
 
       if (type === 'marker') {
+                console.log(e)
         this.dyalogItemAdd = true
         this.point = layer.getLatLng()
         // layer.bindPopup('A popup!')
